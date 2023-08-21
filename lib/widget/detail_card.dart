@@ -30,8 +30,9 @@ class _DetailCard extends State<DetailCard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        shape: Border.all(color: Colors.black),
         centerTitle: true,
-        title: Text(isHistory ? machineName : "$machineName 알림 발송 내역"),
+        title: Text(isHistory ? machineName : "$machineName 알림 발송 내역", style: TextStyle(fontWeight: FontWeight.w700),),
         backgroundColor: Theme.of(context).cardColor,
         actions: [
           IconButton(onPressed: () {
@@ -41,8 +42,13 @@ class _DetailCard extends State<DetailCard> {
           }, icon: const Icon(Icons.history))
         ],
       ),
-      body: Center(
-        child: !isHistory ? _listView() : _logView(),
+      body: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey)
+        ),
+          child: Center(
+            child: !isHistory ? _listView() : _logView(),
+          )
       )
     );
   }

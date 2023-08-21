@@ -89,3 +89,16 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: neo
+      fonts:
+        - asset: font/NanumSquareNeoOTF-Bd.otf
+          weight: 700
+        - asset: font/NanumSquareNeoOTF-Eb.otf
+          weight: 800
+        - asset: font/NanumSquareNeoOTF-Hv.otf
+          weight: 900
+        - asset: font/NanumSquareNeoOTF-Lt.otf
+          weight: 300
+        - asset: font/NanumSquareNeoOTF-Rg.otf
+          weight: 400

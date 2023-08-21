@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
       },
       theme: ThemeData(
         primarySwatch: createMaterialColor(Colors.lightGreen),
+        fontFamily: "neo"
       ),
     );
   }
