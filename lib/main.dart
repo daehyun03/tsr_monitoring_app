@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:tsr_monitoring_app/page/init_page.dart';
 import 'package:tsr_monitoring_app/util/color.dart';
 
-void main() {
-  runApp(const MyApp());
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      //디버그 모드 체크 배터 삭제 예정
       debugShowCheckedModeBanner: false,
       title: 'TSR Monitoring App',
       routes: {

@@ -17,18 +17,21 @@ class RealTimeFigure extends StatelessWidget {
       body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(child: FittedBox ( fit: BoxFit.fitWidth, child:
             SfCartesianChart(
-            primaryXAxis: CategoryAxis(),
-            title: ChartTitle(text: '실시간 진동 차트'),
-            tooltipBehavior: TooltipBehavior(enable: true),
-            series: <ChartSeries<_SalesData, String>>[
-              LineSeries<_SalesData, String>(
-                  dataSource: data,
-                  xValueMapper: (_SalesData sales, _) => sales.year,
-                  yValueMapper: (_SalesData sales, _) => sales.sales,
-                  name: 'test',
-                  dataLabelSettings: DataLabelSettings(isVisible: true))
-            ]),
+                primaryXAxis: CategoryAxis(),
+                title: ChartTitle(text: '실시간 진동 차트'),
+                tooltipBehavior: TooltipBehavior(enable: true),
+                series: <ChartSeries<_SalesData, String>>[
+                  LineSeries<_SalesData, String>(
+                      dataSource: data,
+                      xValueMapper: (_SalesData sales, _) => sales.year,
+                      yValueMapper: (_SalesData sales, _) => sales.sales,
+                      name: 'test',
+                      dataLabelSettings: DataLabelSettings(isVisible: true))
+              ]
+            ))
+            ),
             const Center(
               child: Wrap(
                 spacing: 100,
