@@ -7,14 +7,7 @@ import '../widget/equ_card_one_socket_two_chart.dart';
 import '../widget/equ_card_two_socket_two_chart.dart';
 
 
-class InitPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return _InitPage();
-  }
-}
-
-class _InitPage extends State<InitPage> {
+class InitPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double curWidth = MediaQuery.of(context).size.width;

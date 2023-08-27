@@ -94,6 +94,7 @@ class _LiveChart extends State<LiveChart> {
   @override
   void dispose() {
     super.dispose();
+    socket.close();
   }
 }
 
