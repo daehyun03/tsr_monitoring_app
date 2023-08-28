@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:tsr_monitoring_app/widget/real_time_chart.dart';
 
+import '../util/detail_screen_argument.dart';
+
 class EquCardOSTC extends StatefulWidget {
   late String machineName;
   late IO.Socket socket;
@@ -19,6 +21,7 @@ class _EquCardOSTC extends State<EquCardOSTC> {
   late String channelName1;
   late String channelName2;
   _EquCardOSTC(this.machineName, this.socket, this.channelName1, this.channelName2);
+  late Widget body;
 
   Row _makeBody() {
     return Row(
@@ -30,6 +33,12 @@ class _EquCardOSTC extends State<EquCardOSTC> {
   }
 
   @override
+  void initState() {
+    body = _makeBody();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -37,13 +46,21 @@ class _EquCardOSTC extends State<EquCardOSTC> {
           centerTitle: true,
           title: Text(machineName, style: TextStyle(fontWeight: FontWeight.w700)),
           backgroundColor: Theme.of(context).cardColor,
+          actions: [
+            InkWell(
+              onTap: () {
+                Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, body));
+              },
+              child: Icon(Icons.more_horiz),
+            )
+          ],
         ),
         body: Container(
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey)
             ),
             child: Center(
-                child: _makeBody()
+                child: body
             )
         )
     );

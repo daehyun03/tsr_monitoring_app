@@ -4,12 +4,16 @@ const BASE_URL = "http://202.31.202.34:443";
 const ANOMALY_EVENT = "anomaly";
 //const String BASE_URL = "http://192.168.0.8:8080";
 
+
+//******* REQUEST URL *******//
 const SHOT_BLAST_URL = "/sio/ShotBlast";
 const ARO_PUMP_URL = "/sio/AROPump";
 const DISPENSING_MACHINE_URL = "/sio/DispensingMachine";
 const VACUUM_PUMP1_URL = "/sio/VacuumPump1";
 const VACUUM_PUMP2_URL = "/sio/VacuumPump2";
 
+
+//******* CHANNEL NAME *******//
 const SHOT_BLAST_CHANNEL_NAME = 'shot_blast_vib';
 
 const ARO_PUMP1_CHANNEL_NAME = "aro_vib1";
