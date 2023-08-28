@@ -12,7 +12,6 @@ const data = [
 ];
 
 class AnomalyListView extends StatelessWidget {
-  const AnomalyListView({super.key});
 
   @override
   Widget build(BuildContext context) {

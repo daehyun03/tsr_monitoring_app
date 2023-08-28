@@ -12,13 +12,8 @@ class InitPage extends StatelessWidget {
   Widget build(BuildContext context) {
     double curWidth = MediaQuery.of(context).size.width;
     double curHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('TSR 모니터링 시스템', style: TextStyle(fontWeight: FontWeight.w900),),
-          centerTitle: true,
-          elevation: 5.0,
-        ),
-        body: _body(curWidth, curHeight, machineList)
+    return Container(
+      child: _body(curWidth, curHeight, machineList)
     );
   }
 }
