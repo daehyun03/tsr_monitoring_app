@@ -1,12 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:tsr_monitoring_app/page/detail_page.dart';
 import 'package:tsr_monitoring_app/page/init_page.dart';
 import 'package:tsr_monitoring_app/page/page_container.dart';
 import 'package:tsr_monitoring_app/util/color.dart';
-
+import 'package:tsr_monitoring_app/util/fcm_setting.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  fcmSetting();
   runApp(MyApp());
 }
 
