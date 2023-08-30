@@ -6,21 +6,23 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 
 class LiveChart extends StatefulWidget {
+  late String chartName;
   late IO.Socket socket;
   late String channelName;
-  LiveChart(this.socket, this.channelName, {super.key});
+  LiveChart(this.socket, this.channelName, this.chartName, {super.key});
   @override
-  _LiveChart createState() => _LiveChart(socket, channelName);
+  _LiveChart createState() => _LiveChart(socket, channelName, chartName);
 }
 
 class _LiveChart extends State<LiveChart> {
   late IO.Socket socket;
   late String channelName;
+  late String chartName;
   List<_ChartData> chartData = <_ChartData>[];
   double count = 0;
   ChartSeriesController? _chartSeriesController;
   bool isAnomaly = false;
-  _LiveChart(this.socket, this.channelName);
+  _LiveChart(this.socket, this.channelName, this.chartName);
   @override
   void initState() {
     super.initState();
@@ -55,22 +57,27 @@ class _LiveChart extends State<LiveChart> {
 
   @override
   Widget build(BuildContext context) {
+    double curHeight = MediaQuery.of(context).size.height;
+
     return(
       Column(
         children: [
-          SfCartesianChart(
-            //title: ChartTitle(text: '실시간 데이터 차트'),
-              primaryXAxis: NumericAxis(isVisible: false),
-              series: <LineSeries<_ChartData, double>>[
-                LineSeries(
+          Container(
+              height: curHeight * 0.35,
+              child: SfCartesianChart(
+                title: ChartTitle(text: '$chartName 실시간 데이터 차트'),
+                primaryXAxis: NumericAxis(isVisible: false),
+                series: <LineSeries<_ChartData, double>>[
+                  LineSeries(
                     onRendererCreated: (ChartSeriesController controller) {
                       _chartSeriesController = controller;
                     },
                     dataSource: chartData,
                     xValueMapper: (_ChartData data, _) => data.x,
                     yValueMapper: (_ChartData data, _) => data.y
-                )
-              ]
+                  )
+                ]
+              )
           ),
           Wrap(
             spacing: 100,
@@ -94,7 +101,6 @@ class _LiveChart extends State<LiveChart> {
   @override
   void dispose() {
     super.dispose();
-    socket.close();
   }
 }
 

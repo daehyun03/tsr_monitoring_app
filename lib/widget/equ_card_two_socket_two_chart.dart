@@ -29,8 +29,8 @@ class _EquCardTSTC extends State<EquCardTSTC> {
   Row _makeBody() {
     return Row(
         children: [
-          Expanded(child: LiveChart(socket1, channelName1)),
-          Expanded(child: LiveChart(socket2, channelName2))
+          Expanded(child: LiveChart(socket1, channelName1, '진공펌프1')),
+          Expanded(child: LiveChart(socket2, channelName2, '진공펌프2'))
         ],
     );
   }
@@ -52,7 +52,7 @@ class _EquCardTSTC extends State<EquCardTSTC> {
           actions: [
             InkWell(
               onTap: () {
-                Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, body));
+                Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, _makeBody()));
               },
               child: Icon(Icons.more_horiz),
             )

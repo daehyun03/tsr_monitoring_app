@@ -26,8 +26,8 @@ class _EquCardOSTC extends State<EquCardOSTC> {
   Row _makeBody() {
     return Row(
       children: [
-        Expanded(child: LiveChart(socket, channelName1)),
-        Expanded(child: LiveChart(socket, channelName2))
+        Expanded(child: LiveChart(socket, channelName1, '인산염피막기 입출부')),
+        Expanded(child: LiveChart(socket, channelName2, '인산염피막기 토출부'))
       ],
     );
   }
@@ -49,7 +49,7 @@ class _EquCardOSTC extends State<EquCardOSTC> {
           actions: [
             InkWell(
               onTap: () {
-                Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, body));
+                Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, _makeBody()));
               },
               child: Icon(Icons.more_horiz),
             )
