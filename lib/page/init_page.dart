@@ -49,6 +49,5 @@ Widget _body(double curWidth, double curHeight, List machineList) {
 IO.Socket createSocket(String url) {
   IO.Socket socket = IO.io(url,
   IO.OptionBuilder().setTransports(['websocket']).build());
-  print("$url create socket");
   return socket;
 }

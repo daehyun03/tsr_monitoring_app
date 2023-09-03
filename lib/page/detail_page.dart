@@ -13,7 +13,7 @@ class DetailPage extends StatelessWidget {
             children: [
               Text(arguments.machineName, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 35),),
               arguments.body,
-              Expanded(child: AnomalyListView())
+              Expanded(child: AnomalyListView(arguments.machineName))
             ],
           ),
         )

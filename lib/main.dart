@@ -4,6 +4,8 @@ import 'package:tsr_monitoring_app/page/init_page.dart';
 import 'package:tsr_monitoring_app/page/page_container.dart';
 import 'package:tsr_monitoring_app/util/color.dart';
 import 'package:tsr_monitoring_app/util/fcm_setting.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_localization/flutter_localization.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +34,14 @@ class MyApp extends StatelessWidget {
         primarySwatch: createMaterialColor(Colors.lightGreen),
         fontFamily: "neo"
       ),
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate, // localized values
+          GlobalWidgetsLocalizations.delegate, // RTL 여부 정의
+          GlobalCupertinoLocalizations.delegate, // iOS
+        ],
+    supportedLocales: [
+        const Locale('ko')
+      ],
     );
   }
 }
