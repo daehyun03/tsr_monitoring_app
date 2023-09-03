@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:tsr_monitoring_app/page/detail_page.dart';
 import 'package:tsr_monitoring_app/page/init_page.dart';
@@ -29,8 +27,6 @@ class MyApp extends StatelessWidget {
         '/인산염피막기' : (context) => PageContainer(DetailPage()),
         '/비형상도포기' : (context) => PageContainer(DetailPage()),
         '/진공펌프' : (context) => PageContainer(DetailPage()),
-
-
       },
       theme: ThemeData(
         primarySwatch: createMaterialColor(Colors.lightGreen),

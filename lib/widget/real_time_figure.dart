@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -51,4 +52,4 @@ class _SalesData {
 
   final String year;
   final double sales;
-}
+}*/

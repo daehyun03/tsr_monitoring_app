@@ -1,8 +1,9 @@
+const Map<String, String> machineNameMap = {"쇼트블라스트": "ShotBlast",};
 const List machineList = ["쇼트블라스트", "인산염피막기", "비형상도포기", "진공펌프"];
 const BASE_URL = "http://202.31.202.34:443";
+//const String BASE_URL = "http://192.168.0.8:8080";
 
 const ANOMALY_EVENT = "anomaly";
-//const String BASE_URL = "http://192.168.0.8:8080";
 
 
 //******* REQUEST URL *******//
