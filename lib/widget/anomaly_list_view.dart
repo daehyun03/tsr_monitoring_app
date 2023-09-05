@@ -6,19 +6,48 @@ import 'package:intl/intl.dart';
 import 'package:tsr_monitoring_app/util/constants.dart';
 import 'package:http/http.dart' as http;
 
-
+//더미데이터
 const data = [
   [
     "2023-08-21 00:00:00.385910",
-    1000,
-    1210
+    1000.0,
+    1210.0
   ],
   [
-    "2023-08-21 00:03:00.023155",
-    1000,
-    1180
-  ]
+    "2023-08-21 00:00:00.385910",
+    1000.0,
+    1210.0
+  ],[
+    "2023-08-21 00:00:00.385910",
+    1000.0,
+    1210.0
+  ],[
+    "2023-08-21 00:00:00.385910",
+    1000.0,
+    1210.0
+  ],[
+    "2023-08-21 00:00:00.385910",
+    1000.0,
+    1210.0
+  ],[
+    "2023-08-21 00:00:00.385910",
+    1000.0,
+    1210.0
+  ],[
+    "2023-08-21 00:00:00.385910",
+    1000.0,
+    1210.0
+  ],[
+    "2023-08-21 00:00:00.385910",
+    1000.0,
+    1210.0
+  ],[
+    "2023-08-21 00:00:00.385910",
+    1000.0,
+    1210.0
+  ],
 ];
+
 class AnomalyData {
   final String date;
   final double threshold;
@@ -59,8 +88,8 @@ class _AnomalyListView extends State<AnomalyListView> {
   }
 
   void getDataList() async{
-    dataList = [];
-    /*final url = Uri.parse(getUrl());
+    dataList = [];/*
+    final url = Uri.parse(getUrl());
     final res = await http.get(url);
     List list = jsonDecode(res.body)['anomaly'] as List;*/
 
@@ -121,24 +150,28 @@ class _AnomalyListView extends State<AnomalyListView> {
                 ),
               )
           ]),
-          const Padding(padding: EdgeInsets.only(top: 20)),
-          for(int i = 0; i < dataList.length; i++)
-            _buildAlertRow(context, dataList[i])
+          Expanded(
+            child: ListView.builder(
+              itemCount: dataList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return _buildAlertRow(context, dataList[index]);
+              },
+            ),
+          ),
         ], //children
       ),
     )
     );
   }
 
-  Widget _buildAlertRow(BuildContext constext, AnomalyData data) {
+  Widget _buildAlertRow(BuildContext context, AnomalyData data) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           children: [
-            Text(data.date),
-            Text('이상치 발견 : ${data.score}/${data.threshold}')
+            Align(alignment: Alignment.centerLeft, child: Text(data.date)),
+            Align(alignment: Alignment.centerRight, child: Text('이상치 발견 : ${data.score}/${data.threshold}')),
           ],
         ),
       ),

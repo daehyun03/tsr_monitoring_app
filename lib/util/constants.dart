@@ -1,6 +1,7 @@
 const Map<String, String> machineNameMap = {"쇼트블라스트": "ShotBlast", "인산염피막기": "AROPump", "비형상도포기": "DispensingMachine", "진공펌프": "VacuumPump"};
 const List machineList = ["쇼트블라스트", "인산염피막기", "비형상도포기", "진공펌프"];
-const BASE_URL = "http://202.31.202.34:443";
+
+const BASE_URL = "http://182.228.122.118:8445";
 const DATE_FORMAT = "yyyy-MM-dd";
 //const String BASE_URL = "http://192.168.0.8:8080";
 

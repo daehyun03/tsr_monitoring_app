@@ -7,16 +7,14 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as DetailScreenArgument;
     return Padding(
-        padding: EdgeInsets.only(left: 50, right: 50, top: 50),
-        child: Container(
-          child: Column(
+        padding: const EdgeInsets.all(20),
+        child: Column(
             children: [
               Text(arguments.machineName, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 35),),
               arguments.body,
               Expanded(child: AnomalyListView(arguments.machineName))
             ],
           ),
-        )
     );
   }
 }

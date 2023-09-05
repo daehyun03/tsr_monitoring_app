@@ -24,7 +24,7 @@ class _EquCardOSOC extends State<EquCardOSOC> {
 
   @override
   void initState() {
-    liveChart = LiveChart(socket, channelName, machineName);
+    liveChart = LiveChart(socket, channelName, "");
     super.initState();
   }
 

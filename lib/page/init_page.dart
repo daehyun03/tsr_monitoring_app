@@ -21,7 +21,7 @@ class InitPage extends StatelessWidget {
 Widget _body(double curWidth, double curHeight, List machineList) {
   double itemH = (curHeight - kToolbarHeight) / 2;
   double itemW = curWidth / 2;
-  //if(curWidth >= 768) {
+  if(curWidth >= 768) {
     return GridView.count(
       crossAxisCount: 2,
       childAspectRatio: itemW / itemH,
@@ -33,17 +33,18 @@ Widget _body(double curWidth, double curHeight, List machineList) {
 
       ]
     );
-  /*} else {
-    return ListView.builder(
-      itemCount: machineList.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          height: curHeight * 0.47,
-          child: DetailCard(machineList[index]),
-        );
-      },
+  } else {
+    return GridView.count(
+        crossAxisCount: 1,
+        childAspectRatio: itemW / (itemH/2),
+        children: <Widget> [
+        EquCardOSOC(machineList[0], createSocket(BASE_URL+SHOT_BLAST_URL), SHOT_BLAST_CHANNEL_NAME),
+        EquCardOSTC(machineList[1], createSocket(BASE_URL+ARO_PUMP_URL), ARO_PUMP1_CHANNEL_NAME, ARO_PUMP2_CHANNEL_NAME),
+        EquCardOSOC(machineList[2], createSocket(BASE_URL+DISPENSING_MACHINE_URL), DISPENSING_MACHINE_CHANNEL_NAME),
+        EquCardTSTC(machineList[3], createSocket(BASE_URL+VACUUM_PUMP1_URL), createSocket(BASE_URL+VACUUM_PUMP2_URL), VACUUM_PUMP1_CHANNEL_NAME, VACUUM_PUMP2_CHANNEL_NAME),
+      ]
     );
-  }*/
+  }
 }
 
 IO.Socket createSocket(String url) {
