@@ -83,34 +83,39 @@ class _AnomalyListView extends State<AnomalyListView> {
   String getUrl() {
     String url = BASE_URL + "/stat/anomaly?machine=" + machineNameMap[machineName]! + "&start=" + DateFormat(DATE_FORMAT).format(_startDate)
       +"&end=" +DateFormat(DATE_FORMAT).format(_endDate);
-    print(url);
     return url;
   }
 
   void getDataList() async{
-    dataList = [];/*
-    final url = Uri.parse(getUrl());
+    dataList = [];
+    /*final url = Uri.parse(getUrl());
     final res = await http.get(url);
-    List list = jsonDecode(res.body)['anomaly'] as List;*/
+    List list = jsonDecode(res.body)['anomaly'] as List;
+*/
 
     // 삭제 예정
     List list = data;
     getUrl();
 
+
     for(int i=0; i<list.length; i++){
         dataList.add(new AnomalyData(
+            /*list[i]["time"],
+            list[i]["threshold"],
+            list[i]["score"]*/
             list[i][0],
             list[i][1],
             list[i][2]
         ));
     }
+    setState(() {
+      dataList = dataList;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return(
-    Scaffold(
-      body: Column(
+    return Column(
         children: [
           const Padding(padding: EdgeInsets.only(top: 20)),
           const Text('이상 이력 조회', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),),
@@ -150,18 +155,33 @@ class _AnomalyListView extends State<AnomalyListView> {
                 ),
               )
           ]),
-          Expanded(
-            child: ListView.builder(
-              itemCount: dataList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return _buildAlertRow(context, dataList[index]);
-              },
-            ),
-          ),
+          _buildAlertLog(),
         ], //children
-      ),
-    )
-    );
+      );
+  }
+
+  Widget _buildAlertLog() {
+    if (dataList.isEmpty) {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Align(alignment: Alignment.center, child: Text('이상 이력이 없습니다.')),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return (Expanded(
+        child: ListView.builder(
+          itemCount: dataList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return _buildAlertRow(context, dataList[index]);
+          },
+        ),
+      ));
+    }
   }
 
   Widget _buildAlertRow(BuildContext context, AnomalyData data) {

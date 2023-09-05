@@ -34,7 +34,7 @@ class _LiveChart extends State<LiveChart> {
           });
         } else {
           data[channelName].forEach((value) {
-            chartData.add(_ChartData(count, value * 100));
+            chartData.add(_ChartData(count, value));
             if (chartData.length == 200) {
               chartData.removeAt(0);
               _chartSeriesController?.updateDataSource(
@@ -64,18 +64,9 @@ class _LiveChart extends State<LiveChart> {
           Container(
               height: curHeight * 0.35,
               child: SfCartesianChart(
-                annotations: <CartesianChartAnnotation>[
-                  /*CartesianChartAnnotation(
-                    widget: Container(
-                      child: Text('실제값 * 1000'),
-                    ),
-                    coordinateUnit: CoordinateUnit.percentage,
-                    x:'20%', y: '80%',
-                  )*/
-                ],
                 title: ChartTitle(text: '$chartName'),
                 primaryXAxis: NumericAxis(isVisible: false),
-                primaryYAxis: NumericAxis(labelFormat: '{value}'),
+                primaryYAxis: NumericAxis(interval: 0.1),
                 series: <LineSeries<_ChartData, double>>[
                   LineSeries(
                     onRendererCreated: (ChartSeriesController controller) {

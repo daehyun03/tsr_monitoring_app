@@ -1,4 +1,4 @@
-/*
+
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -14,8 +14,7 @@ class RealTimeFigure extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return  Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(child: FittedBox ( fit: BoxFit.fitWidth, child:
@@ -33,16 +32,7 @@ class RealTimeFigure extends StatelessWidget {
               ]
             ))
             ),
-            const Center(
-              child: Wrap(
-                spacing: 100,
-                children: [
-                  Text("상태", style: TextStyle(fontSize: 20)),
-                  Text("정상", style: TextStyle(fontSize: 20, color: Colors.green))
-                ],
-              ),
-            )
-      ])
+      ]
     );
   }
 }
@@ -52,4 +42,4 @@ class _SalesData {
 
   final String year;
   final double sales;
-}*/
+}
