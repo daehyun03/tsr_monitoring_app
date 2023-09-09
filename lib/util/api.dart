@@ -9,3 +9,8 @@ Future<List> getMachineList() async {
   http.Response response = await http.get(Uri.parse(url));
   return jsonDecode(response.body)['machine_list'] as List;
 }
+
+Future<List> getAVGData(String url) async {
+  http.Response response = await http.get(Uri.parse(url));
+  return jsonDecode(response.body)['avg'] as List;
+}

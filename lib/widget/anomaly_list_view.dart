@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tsr_monitoring_app/util/constants.dart';
@@ -88,24 +87,23 @@ class _AnomalyListView extends State<AnomalyListView> {
 
   void getDataList() async{
     dataList = [];
-    /*final url = Uri.parse(getUrl());
+    final url = Uri.parse(getUrl());
     final res = await http.get(url);
     List list = jsonDecode(res.body)['anomaly'] as List;
-*/
 
-    // 삭제 예정
+    /*// 삭제 예정
     List list = data;
-    getUrl();
+    getUrl();*/
 
 
     for(int i=0; i<list.length; i++){
         dataList.add(new AnomalyData(
-            /*list[i]["time"],
+            list[i]["time"],
             list[i]["threshold"],
-            list[i]["score"]*/
-            list[i][0],
+            list[i]["score"]
+            /*list[i][0],
             list[i][1],
-            list[i][2]
+            list[i][2]*/
         ));
     }
     setState(() {
@@ -161,6 +159,7 @@ class _AnomalyListView extends State<AnomalyListView> {
   }
 
   Widget _buildAlertLog() {
+    double curWidth = MediaQuery.of(context).size.width;
     if (dataList.isEmpty) {
       return Card(
         child: Padding(
@@ -172,7 +171,7 @@ class _AnomalyListView extends State<AnomalyListView> {
           ),
         ),
       );
-    } else {
+    } else if (curWidth > 768) {
       return (Expanded(
         child: ListView.builder(
           itemCount: dataList.length,
@@ -181,6 +180,18 @@ class _AnomalyListView extends State<AnomalyListView> {
           },
         ),
       ));
+    }
+    else {
+      return (
+        Container(
+          child: Column(
+            children: [
+              for(int i=0; i<dataList.length; i++)
+                _buildAlertRow(context, dataList[i])
+            ],
+          ),
+        )
+      );
     }
   }
 

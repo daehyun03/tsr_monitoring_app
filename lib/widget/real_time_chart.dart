@@ -26,6 +26,10 @@ class _LiveChart extends State<LiveChart> {
   @override
   void initState() {
     super.initState();
+    for (int i = 0; i < 200; i++) {
+      chartData.add(_ChartData(count, 0));
+      count += 0.005;
+    }
     socket.onAny((eventName, data) {
       try {
         if (eventName == ANOMALY_EVENT) {
@@ -49,7 +53,6 @@ class _LiveChart extends State<LiveChart> {
           );
         }
       } catch (e) {
-        print(e);
       }
     });
   }
