@@ -47,3 +47,18 @@ class Machine {
 
   Machine(this.name, this.url, this.channelName, this.type);
 }
+
+List getChanelNameList(String name) {
+  switch(name) {
+    case "쇼트블라스트":
+      return SHOT_BLAST_CHANNEL_NAME_ARRAY;
+    case "인산염피막기":
+      return ARO_PUMP_CHANNEL_NAME_ARRAY;
+    case "비형상도포기":
+      return DISPENSING_MACHINE_CHANNEL_NAME_ARRAY;
+    case "진공펌프":
+      return VACUUM_PUMP_CHANNEL_NAME_ARRAY;
+    default:
+      return [];
+  }
+}

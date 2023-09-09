@@ -123,6 +123,10 @@ class _AnomalyListView extends State<AnomalyListView> {
               children: [
                 Container(
                   child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                      textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(fontSize: 20)),
+                    ),
                     onPressed: () async{
                       final selectedDate = await showDatePicker(context: context, initialDate: _startDate, firstDate: DateTime(2023), lastDate: curDate,
                           initialEntryMode: DatePickerEntryMode.calendarOnly);
@@ -139,6 +143,10 @@ class _AnomalyListView extends State<AnomalyListView> {
               Text("~"),
               Container(
                 child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(fontSize: 20)),
+                  ),
                   onPressed: () async{
                     final selectedDate = await showDatePicker(context: context, initialDate: curDate, firstDate: DateTime(2023), lastDate: curDate,
                         initialEntryMode: DatePickerEntryMode.calendarOnly);
