@@ -31,7 +31,7 @@ class _EquCardTSTC extends State<EquCardTSTC> {
   late Widget body;
 
   Widget _makeBody(bool isDetail) {
-    if(curWidth < 768 && isDetail) {
+    if((curWidth < 768) && isDetail) {
       return Container(
           height: curHeight * 0.8,
           child: Column(
