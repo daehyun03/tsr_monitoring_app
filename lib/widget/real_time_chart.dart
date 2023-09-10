@@ -26,10 +26,6 @@ class _LiveChart extends State<LiveChart> {
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < 200; i++) {
-      chartData.add(_ChartData(count, 0));
-      count += 0.005;
-    }
     socket.onAny((eventName, data) {
       try {
         if (eventName == ANOMALY_EVENT) {
@@ -71,7 +67,10 @@ class _LiveChart extends State<LiveChart> {
               child: SfCartesianChart(
                 title: ChartTitle(text: channelNameMap[channelName]!),
                 primaryXAxis: NumericAxis(isVisible: false),
-                primaryYAxis: NumericAxis(interval: 0.1),
+                primaryYAxis: NumericAxis(
+                    //interval: 0.1,
+                  decimalPlaces: 7,
+                ),
                 series: <LineSeries<_ChartData, double>>[
                   LineSeries(
                     onRendererCreated: (ChartSeriesController controller) {

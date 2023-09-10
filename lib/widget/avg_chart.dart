@@ -140,7 +140,10 @@ class _AvgDataChart extends State<AvgDataChart> {
         legend: Legend(isVisible: true, position: LegendPosition.bottom),
         tooltipBehavior: TooltipBehavior(enable: true),
         primaryXAxis: DateTimeCategoryAxis(dateFormat: DateFormat("HH")),
-        primaryYAxis: NumericAxis(interval: 0.1),
+        primaryYAxis: NumericAxis(
+            //interval: 0.1,
+            decimalPlaces: 7
+        ),
         series: <CartesianSeries<_dateAvgData, DateTime>>[
           for (int i = 0; i < channelList.length; i++)
             LineSeries<_dateAvgData, DateTime>(

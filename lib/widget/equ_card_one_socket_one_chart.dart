@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tsr_monitoring_app/util/detail_screen_argument.dart';
-import 'package:tsr_monitoring_app/widget/anomaly_list_view.dart';
 import 'package:tsr_monitoring_app/widget/real_time_chart.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
