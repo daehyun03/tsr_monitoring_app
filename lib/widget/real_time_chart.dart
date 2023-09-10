@@ -6,23 +6,23 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 
 class LiveChart extends StatefulWidget {
-  late String chartName;
   late IO.Socket socket;
   late String channelName;
-  LiveChart(this.socket, this.channelName, this.chartName, {super.key});
+  LiveChart(this.socket, this.channelName, {super.key});
   @override
-  _LiveChart createState() => _LiveChart(socket, channelName, chartName);
+  _LiveChart createState() => _LiveChart(socket, channelName);
 }
 
 class _LiveChart extends State<LiveChart> {
   late IO.Socket socket;
   late String channelName;
-  late String chartName;
   List<_ChartData> chartData = <_ChartData>[];
+  double threshold = 0;
+  double score = 0;
   double count = 0;
   ChartSeriesController? _chartSeriesController;
   bool isAnomaly = false;
-  _LiveChart(this.socket, this.channelName, this.chartName);
+  _LiveChart(this.socket, this.channelName);
   @override
   void initState() {
     super.initState();
@@ -35,6 +35,8 @@ class _LiveChart extends State<LiveChart> {
         if (eventName == ANOMALY_EVENT) {
           setState(() {
             isAnomaly = data[ANOMALY_EVENT];
+            threshold = data[THRESHOLD];
+            score = data[SCORE];
           });
         } else {
           data[channelName].forEach((value) {
@@ -67,7 +69,7 @@ class _LiveChart extends State<LiveChart> {
           Container(
               height: curHeight * 0.35,
               child: SfCartesianChart(
-                title: ChartTitle(text: '$chartName'),
+                title: ChartTitle(text: channelNameMap[channelName]!),
                 primaryXAxis: NumericAxis(isVisible: false),
                 primaryYAxis: NumericAxis(interval: 0.1),
                 series: <LineSeries<_ChartData, double>>[
@@ -96,7 +98,7 @@ class _LiveChart extends State<LiveChart> {
 
   Text _getStateText() {
     if (isAnomaly) {
-      return Text("고장", style: TextStyle(fontSize: 20, color: Colors.red));
+      return Text("고장 $score / $threshold", style: TextStyle(fontSize: 20, color: Colors.red));
     }
     return Text("정상", style: TextStyle(fontSize: 20, color: Colors.green));
   }

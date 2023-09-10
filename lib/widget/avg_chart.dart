@@ -18,7 +18,7 @@ class AvgDataChart extends StatefulWidget {
 
 class _AvgDataChart extends State<AvgDataChart> {
   late String machineName;
-  List<List<_dateAvgData>> data = [];
+  List<_dateAvgData> data = [];
   DateTime curDate = DateTime.now();
   DateTime today = DateTime.now();
 
@@ -50,11 +50,13 @@ class _AvgDataChart extends State<AvgDataChart> {
 
     for (int i = 0; i < channelList.length; i++) {
       List list = jsonDecode(res.body)[channelList[i] + "_hour_avg"] as List;
-      List<_dateAvgData> tmp = [];
-      for (int i = 0; i < list.length; i++) {
-        tmp.add(_dateAvgData(DateTime.parse(list[i][0]), list[i][1]));
+      for (int j = 0; j < list.length; j++) {
+        if(i == 0) {
+          data.add(_dateAvgData(DateTime.parse(list[j][0]), list[j][1]));
+        } else {
+          data[j].addAvg(list[j][1]);
+        }
       }
-      data.add(tmp);
     }
 
     setState(() {
@@ -70,11 +72,13 @@ class _AvgDataChart extends State<AvgDataChart> {
           DateFormat(DATE_FORMAT).format(curDate));
       final res = await http.get(url);
       List list = jsonDecode(res.body)[channelList[i] + "_hour_avg"] as List;
-      List<_dateAvgData> tmp = [];
-      for (int i = 0; i < list.length; i++) {
-        tmp.add(_dateAvgData(DateTime.parse(list[i][0]), list[i][1]));
+      for (int j = 0; j < list.length; j++) {
+        if(i == 0) {
+          data.add(_dateAvgData(DateTime.parse(list[j][0]), list[j][1]));
+        } else {
+          data[j].addAvg(list[j][1]);
+        }
       }
-      data.add(tmp);
     }
 
     setState(() {
@@ -84,14 +88,14 @@ class _AvgDataChart extends State<AvgDataChart> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Container(
+        height: MediaQuery.of(context).size.height * 0.4,
+      child: Column(
         children: [
           const Padding(padding: EdgeInsets.only(top: 20)),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('일일 평균 조회     ',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),),
               Container(
                 child: ElevatedButton(
                   style: ButtonStyle(
@@ -116,12 +120,15 @@ class _AvgDataChart extends State<AvgDataChart> {
                   },
                   child: Text(DateFormat(DATE_FORMAT).format(curDate)),
                 ),
-              )
+              ),
+              const Text('   시간당 평균 조회',
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),),
             ],
           ),
           const Padding(padding: EdgeInsets.only(top: 20)),
           Expanded(child: _buildChart())
         ]
+      )
     );
   }
 
@@ -130,17 +137,17 @@ class _AvgDataChart extends State<AvgDataChart> {
       return const Text("데이터가 없습니다.");
     } else {
       return SfCartesianChart(
-        legend: Legend(isVisible: true),
+        legend: Legend(isVisible: true, position: LegendPosition.bottom),
         tooltipBehavior: TooltipBehavior(enable: true),
         primaryXAxis: DateTimeCategoryAxis(dateFormat: DateFormat("HH")),
-        //primaryYAxis: NumericAxis(interval: 0.1),
+        primaryYAxis: NumericAxis(interval: 0.1),
         series: <CartesianSeries<_dateAvgData, DateTime>>[
           for (int i = 0; i < channelList.length; i++)
             LineSeries<_dateAvgData, DateTime>(
-                name: channelList[i],
-                dataSource: data[i],
+                name: channelList[i]+"_hour_avg",
+                dataSource: data,
                 xValueMapper: (_dateAvgData data, _) => data.date,
-                yValueMapper: (_dateAvgData data, _) => data.avg,
+                yValueMapper: (_dateAvgData data, _) => data.avg[i],
                 dataLabelSettings: DataLabelSettings(isVisible: true)
             ),
         ]
@@ -151,7 +158,13 @@ class _AvgDataChart extends State<AvgDataChart> {
 
 class _dateAvgData {
   final DateTime date;
-  final double avg;
+  List avg = [];
 
-  _dateAvgData(this.date, this.avg);
+  _dateAvgData(this.date, double avg) {
+    this.avg.add(avg);
+  }
+
+  void addAvg(double avg) {
+    this.avg.add(avg);
+  }
 }

@@ -26,21 +26,6 @@ class DetailPage extends StatelessWidget {
         ),
       );
     } else {
-      /*return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              Text(arguments.machineName, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 35),),
-              arguments.body,
-              Expanded(child: Column(
-                  children: [
-                    Expanded(child: AnomalyListView(arguments.machineName)),
-                    Expanded(child: RealTimeFigure())
-                  ]
-              ))
-            ],
-          ),
-      );*/
       return Padding(
           padding: const EdgeInsets.all(20),
           child: ListView(

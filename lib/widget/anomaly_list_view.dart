@@ -91,19 +91,11 @@ class _AnomalyListView extends State<AnomalyListView> {
     final res = await http.get(url);
     List list = jsonDecode(res.body)['anomaly'] as List;
 
-    /*// 삭제 예정
-    List list = data;
-    getUrl();*/
-
-
     for(int i=0; i<list.length; i++){
         dataList.add(new AnomalyData(
             list[i]["time"],
             list[i]["threshold"],
             list[i]["score"]
-            /*list[i][0],
-            list[i][1],
-            list[i][2]*/
         ));
     }
     setState(() {

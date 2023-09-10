@@ -26,8 +26,8 @@ class _EquCardOSTC extends State<EquCardOSTC> {
   Row _makeBody() {
     return Row(
       children: [
-        Expanded(child: LiveChart(socket, channelName1, '인산염피막기 입출부')),
-        Expanded(child: LiveChart(socket, channelName2, '인산염피막기 토출부'))
+        Expanded(child: LiveChart(socket, channelName1)),
+        Expanded(child: LiveChart(socket, channelName2))
       ],
     );
   }

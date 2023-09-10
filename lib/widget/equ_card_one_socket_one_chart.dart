@@ -24,7 +24,7 @@ class _EquCardOSOC extends State<EquCardOSOC> {
 
   @override
   void initState() {
-    liveChart = LiveChart(socket, channelName, "");
+    liveChart = LiveChart(socket, channelName);
     super.initState();
   }
 
@@ -39,7 +39,7 @@ class _EquCardOSOC extends State<EquCardOSOC> {
         actions: [
           InkWell(
             onTap: () {
-              Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, LiveChart(socket, channelName, machineName)));
+              Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, LiveChart(socket, channelName)));
             },
             child: Icon(Icons.more_horiz),
           )

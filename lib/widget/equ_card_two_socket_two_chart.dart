@@ -29,8 +29,8 @@ class _EquCardTSTC extends State<EquCardTSTC> {
   Widget _makeBody() {
     return Row(
         children: [
-          Expanded(child: LiveChart(socket1, channelName1, '진공펌프1')),
-          Expanded(child: LiveChart(socket2, channelName2, '진공펌프2'))
+          Expanded(child: LiveChart(socket1, channelName1)),
+          Expanded(child: LiveChart(socket2, channelName2))
         ],
     );
   }
