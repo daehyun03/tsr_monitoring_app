@@ -144,7 +144,7 @@ class _AvgDataChart extends State<AvgDataChart> {
         series: <CartesianSeries<_dateAvgData, DateTime>>[
           for (int i = 0; i < channelList.length; i++)
             LineSeries<_dateAvgData, DateTime>(
-                name: channelList[i]+"_hour_avg",
+                name: channelNameMap[channelList[i]]!,
                 dataSource: data,
                 xValueMapper: (_dateAvgData data, _) => data.date,
                 yValueMapper: (_dateAvgData data, _) => data.avg[i],

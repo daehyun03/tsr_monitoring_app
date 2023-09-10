@@ -9,10 +9,12 @@ class EquCardOSTC extends StatefulWidget {
   late IO.Socket socket;
   late String channelName1;
   late String channelName2;
-  EquCardOSTC(this.machineName, this.socket, this.channelName1, this.channelName2, {super.key});
+  late double curWidth;
+  late double curHeight;
+  EquCardOSTC(this.machineName, this.socket, this.channelName1, this.channelName2, this.curWidth, this.curHeight);
 
   @override
-  State<StatefulWidget> createState() => _EquCardOSTC(machineName, socket, channelName1, channelName2);
+  State<StatefulWidget> createState() => _EquCardOSTC(machineName, socket, channelName1, channelName2, curWidth, curHeight);
 }
 
 class _EquCardOSTC extends State<EquCardOSTC> {
@@ -20,10 +22,23 @@ class _EquCardOSTC extends State<EquCardOSTC> {
   late IO.Socket socket;
   late String channelName1;
   late String channelName2;
-  _EquCardOSTC(this.machineName, this.socket, this.channelName1, this.channelName2);
+  late double curWidth;
+  late double curHeight;
+  _EquCardOSTC(this.machineName, this.socket, this.channelName1, this.channelName2, this.curWidth, this.curHeight);
   late Widget body;
 
-  Row _makeBody() {
+  Widget _makeBody(bool isDetail) {
+    if(curWidth < 768 && isDetail) {
+      return Container(
+          height: curHeight * 0.8,
+          child: Column(
+            children: [
+              Expanded(child: LiveChart(socket, channelName1)),
+              Expanded(child: LiveChart(socket, channelName2))
+            ],
+          )
+      );
+    }
     return Row(
       children: [
         Expanded(child: LiveChart(socket, channelName1)),
@@ -34,7 +49,7 @@ class _EquCardOSTC extends State<EquCardOSTC> {
 
   @override
   void initState() {
-    body = _makeBody();
+    body = _makeBody(false);
     super.initState();
   }
 
@@ -49,7 +64,7 @@ class _EquCardOSTC extends State<EquCardOSTC> {
           actions: [
             InkWell(
               onTap: () {
-                Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, _makeBody()));
+                Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, _makeBody(true)));
               },
               child: Icon(Icons.more_horiz),
             )
