@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tsr_monitoring_app/util/constants.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-
+import 'dart:math' as Math;
+import 'package:intl/intl.dart';
 
 class LiveChart extends StatefulWidget {
   late IO.Socket socket;
@@ -25,6 +26,9 @@ class _LiveChart extends State<LiveChart> {
   _LiveChart(this.socket, this.channelName);
   @override
   void initState() {
+    /*for(int i = 0; i < 200; i++) {
+      chartData.add(_ChartData(i.toDouble(), 0));
+    }*/
     super.initState();
     socket.onAny((eventName, data) {
       try {
@@ -60,16 +64,17 @@ class _LiveChart extends State<LiveChart> {
     double curHeight = MediaQuery.of(context).size.height;
 
     return(
-      Column(
-        children: [
+      Column(        children: [
           Container(
               height: curHeight * 0.35,
               child: SfCartesianChart(
                 title: ChartTitle(text: channelNameMap[channelName]!),
                 primaryXAxis: NumericAxis(isVisible: false),
                 primaryYAxis: NumericAxis(
-                    //interval: 0.1,
-                  decimalPlaces: 7,
+                  //interval: 0.1,
+                  decimalPlaces: 10,
+                  numberFormat: NumberFormat('0.##E+0')
+                  //labelFormat: (value) => value.toExponential(5)
                 ),
                 series: <LineSeries<_ChartData, double>>[
                   LineSeries(
