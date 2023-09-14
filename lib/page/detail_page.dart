@@ -27,7 +27,7 @@ class DetailPage extends StatelessWidget {
       );
     } else {
       return Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(5),
           child: ListView(
             children: [
               Align(alignment: Alignment.center, child: Text(arguments.machineName, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 35),),),

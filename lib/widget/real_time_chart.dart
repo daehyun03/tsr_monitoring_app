@@ -3,45 +3,49 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tsr_monitoring_app/util/constants.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'dart:math' as Math;
 import 'package:intl/intl.dart';
 
 class LiveChart extends StatefulWidget {
   late IO.Socket socket;
   late String channelName;
-  LiveChart(this.socket, this.channelName, {super.key});
+  late double curWidth;
+  LiveChart(this.socket, this.channelName, this.curWidth);
   @override
-  _LiveChart createState() => _LiveChart(socket, channelName);
+  _LiveChart createState() => _LiveChart(socket, channelName, curWidth);
 }
 
 class _LiveChart extends State<LiveChart> {
   late IO.Socket socket;
   late String channelName;
+  late int maxLen;
   List<_ChartData> chartData = <_ChartData>[];
   double threshold = 0;
   double score = 0;
   double count = 0;
   ChartSeriesController? _chartSeriesController;
   bool isAnomaly = false;
-  _LiveChart(this.socket, this.channelName);
+  late double curWidth;
+  _LiveChart(this.socket, this.channelName, this.curWidth);
   @override
   void initState() {
-    /*for(int i = 0; i < 200; i++) {
-      chartData.add(_ChartData(i.toDouble(), 0));
-    }*/
     super.initState();
+    if (curWidth <= 768) {
+      maxLen = 80;
+    } else {
+      maxLen = 200;
+    }
     socket.onAny((eventName, data) {
       try {
         if (eventName == ANOMALY_EVENT) {
           setState(() {
             isAnomaly = data[ANOMALY_EVENT];
-            threshold = data[THRESHOLD];
-            score = data[SCORE];
+            threshold = data[THRESHOLD] as double;
+            score = data[SCORE] as double;
           });
         } else {
           data[channelName].forEach((value) {
             chartData.add(_ChartData(count, value));
-            if (chartData.length == 200) {
+            if (chartData.length == maxLen) {
               chartData.removeAt(0);
               _chartSeriesController?.updateDataSource(
                   addedDataIndexes: <int>[chartData.length - 1],
@@ -64,47 +68,57 @@ class _LiveChart extends State<LiveChart> {
     double curHeight = MediaQuery.of(context).size.height;
 
     return(
-      Column(        children: [
+      Column(children: [
           Container(
-              height: curHeight * 0.35,
-              child: SfCartesianChart(
-                title: ChartTitle(text: channelNameMap[channelName]!),
-                primaryXAxis: NumericAxis(isVisible: false),
-                primaryYAxis: NumericAxis(
-                  //interval: 0.1,
-                  decimalPlaces: 10,
-                  numberFormat: NumberFormat('0.##E+0')
-                  //labelFormat: (value) => value.toExponential(5)
-                ),
-                series: <LineSeries<_ChartData, double>>[
-                  LineSeries(
-                    onRendererCreated: (ChartSeriesController controller) {
-                      _chartSeriesController = controller;
-                    },
-                    dataSource: chartData,
-                    xValueMapper: (_ChartData data, _) => data.x,
-                    yValueMapper: (_ChartData data, _) => data.y,
-                  )
-                ]
-              )
+            padding: EdgeInsets.all(5),
+            height: curHeight * 0.35,
+            child: SfCartesianChart(
+              title: ChartTitle(text: channelNameMap[channelName]!),
+              primaryXAxis: NumericAxis(isVisible: false),
+              primaryYAxis: NumericAxis(
+                //interval: 0.1,
+                decimalPlaces: 10,
+                numberFormat: NumberFormat('0.##E+0'),
+                rangePadding: ChartRangePadding.round,
+              ),
+              series: <LineSeries<_ChartData, double>>[
+                LineSeries(
+                  onRendererCreated: (ChartSeriesController controller) {
+                    _chartSeriesController = controller;
+                  },
+                  dataSource: chartData,
+                  xValueMapper: (_ChartData data, _) => data.x,
+                  yValueMapper: (_ChartData data, _) => data.y,
+                )
+              ]
+            )
           ),
-          Wrap(
-            spacing: 100,
-            children: [
-              Text("상태", style: TextStyle(fontSize: 20)),
-              _getStateText(),
-            ],
-          )
+          _getBottomWrap(),
         ],
       )
     );
   }
 
-  Text _getStateText() {
-    if (isAnomaly) {
-      return Text("고장 $score / $threshold", style: TextStyle(fontSize: 20, color: Colors.red));
+  Wrap _getBottomWrap() {
+    double size = 20;
+    if(curWidth <= 768) {
+      size = 15;
     }
-    return Text("정상", style: TextStyle(fontSize: 20, color: Colors.green));
+    return Wrap(
+        spacing: 100,
+        children: [
+          Text("상태", style: TextStyle(fontSize: size)),
+          _getStateText(size),
+        ],
+    );
+
+  }
+
+  Text _getStateText(double size) {
+    if (isAnomaly) {
+      return Text("고장 $score / $threshold", style: TextStyle(fontSize: size-3, color: Colors.red));
+    }
+    return Text("정상", style: TextStyle(fontSize: size, color: Colors.green));
   }
 
   @override

@@ -33,16 +33,16 @@ class _EquCardOSTC extends State<EquCardOSTC> {
           height: curHeight * 0.8,
           child: Column(
             children: [
-              Expanded(child: LiveChart(socket, channelName1)),
-              Expanded(child: LiveChart(socket, channelName2))
+              Expanded(child: LiveChart(socket, channelName1, curWidth)),
+              Expanded(child: LiveChart(socket, channelName2, curWidth))
             ],
           )
       );
     }
     return Row(
       children: [
-        Expanded(child: LiveChart(socket, channelName1)),
-        Expanded(child: LiveChart(socket, channelName2))
+        Expanded(child: LiveChart(socket, channelName1, curWidth)),
+        Expanded(child: LiveChart(socket, channelName2, curWidth))
       ],
     );
   }

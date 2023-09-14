@@ -7,23 +7,25 @@ class EquCardOSOC extends StatefulWidget {
   late String machineName;
   late IO.Socket socket;
   late String channelName;
+  late double curWidth;
 
-  EquCardOSOC(this.machineName, this.socket, this.channelName, {super.key});
+  EquCardOSOC(this.machineName, this.socket, this.channelName, this.curWidth,);
 
   @override
-  State<StatefulWidget> createState() => _EquCardOSOC(machineName, socket, channelName);
+  State<StatefulWidget> createState() => _EquCardOSOC(machineName, socket, channelName, curWidth);
 }
 
 class _EquCardOSOC extends State<EquCardOSOC> {
   late IO.Socket socket;
   late String machineName;
+  late double curWidth;
   late String channelName;
-  _EquCardOSOC(this.machineName, this.socket, this.channelName);
+  _EquCardOSOC(this.machineName, this.socket, this.channelName, this.curWidth);
   late LiveChart liveChart;
 
   @override
   void initState() {
-    liveChart = LiveChart(socket, channelName);
+    liveChart = LiveChart(socket, channelName, curWidth);
     super.initState();
   }
 
@@ -38,7 +40,7 @@ class _EquCardOSOC extends State<EquCardOSOC> {
         actions: [
           InkWell(
             onTap: () {
-              Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, LiveChart(socket, channelName)));
+              Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, LiveChart(socket, channelName, curWidth)));
             },
             child: Icon(Icons.more_horiz),
           )

@@ -36,16 +36,16 @@ class _EquCardTSTC extends State<EquCardTSTC> {
           height: curHeight * 0.8,
           child: Column(
             children: [
-              Expanded(child: LiveChart(socket1, channelName1)),
-              Expanded(child: LiveChart(socket2, channelName2))
+              Expanded(child: LiveChart(socket1, channelName1, curWidth)),
+              Expanded(child: LiveChart(socket2, channelName2, curWidth)),
             ],
         )
       );
     }
     return Row(
         children: [
-          Expanded(child: LiveChart(socket1, channelName1)),
-          Expanded(child: LiveChart(socket2, channelName2))
+          Expanded(child: LiveChart(socket1, channelName1, curWidth)),
+          Expanded(child: LiveChart(socket2, channelName2, curWidth))
         ],
     );
   }
