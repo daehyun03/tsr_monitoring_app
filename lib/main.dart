@@ -3,13 +3,18 @@ import 'package:tsr_monitoring_app/page/detail_page.dart';
 import 'package:tsr_monitoring_app/page/init_page.dart';
 import 'package:tsr_monitoring_app/page/page_container.dart';
 import 'package:tsr_monitoring_app/util/color.dart';
+import 'package:tsr_monitoring_app/util/custom_theme_data.dart';
+import 'package:tsr_monitoring_app/util/custom_theme_mode.dart';
 import 'package:tsr_monitoring_app/util/fcm_setting.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:tsr_monitoring_app/util/unique_shared_preference.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   fcmSetting();
+  UniqueSharedPreference.init();
+  CustomThemeMode.instance;
   runApp(MyApp());
 }
 
@@ -30,10 +35,9 @@ class MyApp extends StatelessWidget {
         '/비형상도포기' : (context) => PageContainer(DetailPage()),
         '/진공펌프' : (context) => PageContainer(DetailPage()),
       },
-      theme: ThemeData(
-        primarySwatch: createMaterialColor(Colors.lightGreen),
-        fontFamily: "neo"
-      ),
+      darkTheme: CustomThemeData.dark,
+      theme: CustomThemeData.light,
+      themeMode: CustomThemeMode.themeMode.value,
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate, // localized values
           GlobalWidgetsLocalizations.delegate, // RTL 여부 정의

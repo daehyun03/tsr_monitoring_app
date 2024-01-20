@@ -8,48 +8,53 @@ class EquCardOSOC extends StatefulWidget {
   late IO.Socket socket;
   late String channelName;
   late double curWidth;
+  late double curHeight;
 
-  EquCardOSOC(this.machineName, this.socket, this.channelName, this.curWidth,);
+  EquCardOSOC(this.machineName, this.socket, this.channelName, this.curWidth, this.curHeight);
 
   @override
-  State<StatefulWidget> createState() => _EquCardOSOC(machineName, socket, channelName, curWidth);
+  State<StatefulWidget> createState() => _EquCardOSOC(machineName, socket, channelName, curWidth, curHeight);
 }
 
 class _EquCardOSOC extends State<EquCardOSOC> {
   late IO.Socket socket;
   late String machineName;
   late double curWidth;
+  late double curHeight;
   late String channelName;
-  _EquCardOSOC(this.machineName, this.socket, this.channelName, this.curWidth);
+  _EquCardOSOC(this.machineName, this.socket, this.channelName, this.curWidth, this.curHeight);
   late LiveChart liveChart;
 
   @override
   void initState() {
-    liveChart = LiveChart(socket, channelName, curWidth);
+    liveChart = LiveChart(socket, channelName, curWidth, false);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    if(curWidth >= 768) {
+      return Container(
+            child: Center(
+                child: liveChart
+            )
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         shape: Border.all(color: Colors.black),
         centerTitle: true,
         title: Text(machineName, style: TextStyle(fontWeight: FontWeight.w700)),
-        backgroundColor: Theme.of(context).cardColor,
         actions: [
           InkWell(
             onTap: () {
-              Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, LiveChart(socket, channelName, curWidth)));
+              Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, LiveChart(socket, channelName, curWidth, true)));
             },
             child: Icon(Icons.more_horiz),
           )
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey)
-        ),
           child: Center(
             child: liveChart
           )

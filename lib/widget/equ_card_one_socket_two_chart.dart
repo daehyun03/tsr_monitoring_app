@@ -33,16 +33,16 @@ class _EquCardOSTC extends State<EquCardOSTC> {
           height: curHeight * 0.8,
           child: Column(
             children: [
-              Expanded(child: LiveChart(socket, channelName1, curWidth)),
-              Expanded(child: LiveChart(socket, channelName2, curWidth))
+              Expanded(child: LiveChart(socket, channelName1, curWidth, isDetail)),
+              Expanded(child: LiveChart(socket, channelName2, curWidth, isDetail))
             ],
           )
       );
     }
     return Row(
       children: [
-        Expanded(child: LiveChart(socket, channelName1, curWidth)),
-        Expanded(child: LiveChart(socket, channelName2, curWidth))
+        Expanded(child: LiveChart(socket, channelName1, curWidth, isDetail)),
+        Expanded(child: LiveChart(socket, channelName2, curWidth, isDetail))
       ],
     );
   }
@@ -55,12 +55,26 @@ class _EquCardOSTC extends State<EquCardOSTC> {
 
   @override
   Widget build(BuildContext context) {
+    if(curWidth >= 768) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 7),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, _makeBody(true)));
+          },
+          child: Container(
+            child: Center(
+                child: body
+            )
+          ),
+        )
+      );
+    }
     return Scaffold(
         appBar: AppBar(
           shape: Border.all(color: Colors.black),
           centerTitle: true,
           title: Text(machineName, style: TextStyle(fontWeight: FontWeight.w700)),
-          backgroundColor: Theme.of(context).cardColor,
           actions: [
             InkWell(
               onTap: () {
@@ -71,9 +85,6 @@ class _EquCardOSTC extends State<EquCardOSTC> {
           ],
         ),
         body: Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey)
-            ),
             child: Center(
                 child: body
             )

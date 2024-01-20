@@ -108,7 +108,7 @@ class _AnomalyListView extends State<AnomalyListView> {
     return Column(
         children: [
           const Padding(padding: EdgeInsets.only(top: 20)),
-          const Text('이상 이력 조회', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),),
+          const Text('이상 이력', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),),
           const Padding(padding: EdgeInsets.only(top: 20)),
           Row (
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,7 +116,6 @@ class _AnomalyListView extends State<AnomalyListView> {
                 Container(
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
                       textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(fontSize: 20)),
                     ),
                     onPressed: () async{
@@ -136,7 +135,6 @@ class _AnomalyListView extends State<AnomalyListView> {
               Container(
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
                     textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(fontSize: 20)),
                   ),
                   onPressed: () async{
@@ -159,8 +157,7 @@ class _AnomalyListView extends State<AnomalyListView> {
   }
 
   Widget _buildAlertLog() {
-    double curWidth = MediaQuery.of(context).size.width;
-    if (dataList.isEmpty) {
+    double curWidth = MediaQuery.of(context).size.width;if (dataList.isEmpty) {
       return Card(
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -180,8 +177,7 @@ class _AnomalyListView extends State<AnomalyListView> {
           },
         ),
       ));
-    }
-    else {
+    } else {
       return (
         Container(
           child: Column(

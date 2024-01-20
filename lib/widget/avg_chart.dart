@@ -5,6 +5,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tsr_monitoring_app/util/constants.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:tsr_monitoring_app/util/unique_shared_preference.dart';
 
 class AvgDataChart extends StatefulWidget {
   late String machineName;
@@ -88,6 +89,7 @@ class _AvgDataChart extends State<AvgDataChart> {
 
   @override
   Widget build(BuildContext context) {
+    String curUnit = UniqueSharedPreference.getString("selectedUnit");
     return Container(
         height: MediaQuery.of(context).size.height * 0.4,
       child: Column(
@@ -96,37 +98,37 @@ class _AvgDataChart extends State<AvgDataChart> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        Colors.white),
-                    textStyle: MaterialStateProperty.all<TextStyle>(
-                        TextStyle(fontSize: 20)),
-                  ),
-                  onPressed: () async {
-                    final selectedDate = await showDatePicker(
-                        context: context,
-                        initialDate: curDate,
-                        firstDate: DateTime(2023),
-                        lastDate: today,
-                        initialEntryMode: DatePickerEntryMode.calendarOnly);
-                    if (selectedDate != null) {
-                      setState(() {
-                        curDate = selectedDate;
-                        getDataList(getIsOneSocket(machineName));
-                      });
-                    }
-                  },
-                  child: Text(DateFormat(DATE_FORMAT).format(curDate)),
-                ),
-              ),
-              const Text('   시간당 평균 조회',
+              const Text('평균 조회',
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),),
             ],
           ),
           const Padding(padding: EdgeInsets.only(top: 20)),
-          Expanded(child: _buildChart())
+          Expanded(child: _buildChart()),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for(int i = 0; i< avgList.length; i++)
+                  Container(
+                    margin: EdgeInsets.only(left: 10, right: 10),
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                          textStyle: MaterialStateProperty.all<TextStyle>(
+                              TextStyle(fontSize: 15)),
+                          backgroundColor: _setButtonColor(curUnit, avgList[i]),
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            UniqueSharedPreference.setString("selectedUnit", avgList[i]);
+                          });
+                        },
+                        child: Text(avgList[i])
+                    ),
+                  )
+              ],
+            ),
+          )
         ]
       )
     );
@@ -136,6 +138,7 @@ class _AvgDataChart extends State<AvgDataChart> {
     if (data.isEmpty) {
       return const Text("데이터가 없습니다.");
     } else {
+      //TODO : 선택된 단위에 맞게 데이터 요청 및 x축 단위 변경
       return SfCartesianChart(
         legend: Legend(isVisible: true, position: LegendPosition.bottom),
         tooltipBehavior: TooltipBehavior(enable: true),
@@ -147,15 +150,27 @@ class _AvgDataChart extends State<AvgDataChart> {
         series: <CartesianSeries<_dateAvgData, DateTime>>[
           for (int i = 0; i < channelList.length; i++)
             LineSeries<_dateAvgData, DateTime>(
-                name: channelNameMap[channelList[i]]!,
-                dataSource: data,
-                xValueMapper: (_dateAvgData data, _) => data.date,
-                yValueMapper: (_dateAvgData data, _) => data.avg[i],
-                dataLabelSettings: DataLabelSettings(isVisible: true)
+              /*trendlines: <Trendline>[
+                  Trendline(
+                  type: TrendlineType.linear,
+              )],*/
+              name: channelNameMap[channelList[i]]!,
+              dataSource: data,
+              xValueMapper: (_dateAvgData data, _) => data.date,
+              yValueMapper: (_dateAvgData data, _) => data.avg[i],
+              dataLabelSettings: DataLabelSettings(isVisible: true)
             ),
         ]
       );
     }
+  }
+}
+
+_setButtonColor(String curUnit, String selectedUnit) {
+  if(curUnit == selectedUnit) {
+    return MaterialStateProperty.all<Color>(Colors.blue);
+  } else {
+    return MaterialStateProperty.all<Color>(Color(0xFF3E3E3E));
   }
 }
 

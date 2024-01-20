@@ -36,17 +36,19 @@ class _EquCardTSTC extends State<EquCardTSTC> {
           height: curHeight * 0.8,
           child: Column(
             children: [
-              Expanded(child: LiveChart(socket1, channelName1, curWidth)),
-              Expanded(child: LiveChart(socket2, channelName2, curWidth)),
+              Expanded(child: LiveChart(socket1, channelName1, curWidth, isDetail)),
+              Expanded(child: LiveChart(socket2, channelName2, curWidth, isDetail)),
             ],
         )
       );
     }
-    return Row(
+    return Container(
+      child: Row(
         children: [
-          Expanded(child: LiveChart(socket1, channelName1, curWidth)),
-          Expanded(child: LiveChart(socket2, channelName2, curWidth))
+          Expanded(child: LiveChart(socket1, channelName1, curWidth, isDetail)),
+          Expanded(child: LiveChart(socket2, channelName2, curWidth, isDetail))
         ],
+      ),
     );
   }
 
@@ -58,12 +60,18 @@ class _EquCardTSTC extends State<EquCardTSTC> {
 
   @override
   Widget build(BuildContext context) {
+    if(curWidth >= 768) {
+      return Container(
+        child: Center(
+            child: body
+        )
+      );
+    }
     return Scaffold(
         appBar: AppBar(
           shape: Border.all(color: Colors.black),
           centerTitle: true,
           title: Text(machineName, style: TextStyle(fontWeight: FontWeight.w700)),
-          backgroundColor: Theme.of(context).cardColor,
           actions: [
             InkWell(
               onTap: () {
@@ -74,9 +82,6 @@ class _EquCardTSTC extends State<EquCardTSTC> {
           ],
         ),
         body: Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey)
-            ),
             child: Center(
               child: body
             )
