@@ -91,7 +91,6 @@ class _AvgDataChart extends State<AvgDataChart> {
   Widget build(BuildContext context) {
     String curUnit = UniqueSharedPreference.getString("selectedUnit");
     return Container(
-        height: MediaQuery.of(context).size.height * 0.4,
       child: Column(
         children: [
           const Padding(padding: EdgeInsets.only(top: 20)),
@@ -150,10 +149,12 @@ class _AvgDataChart extends State<AvgDataChart> {
         series: <CartesianSeries<_dateAvgData, DateTime>>[
           for (int i = 0; i < channelList.length; i++)
             LineSeries<_dateAvgData, DateTime>(
-              /*trendlines: <Trendline>[
+              trendlines: <Trendline>[
                   Trendline(
-                  type: TrendlineType.linear,
-              )],*/
+                    type: TrendlineType.linear,
+                    color: Colors.white,
+                    name: channelNameMap[channelList[i]]! + " 추세선",
+              )],
               name: channelNameMap[channelList[i]]!,
               dataSource: data,
               xValueMapper: (_dateAvgData data, _) => data.date,

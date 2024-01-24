@@ -34,10 +34,15 @@ class _EquCardOSOC extends State<EquCardOSOC> {
   @override
   Widget build(BuildContext context) {
     if(curWidth >= 768) {
-      return Container(
+      return GestureDetector(
+        onTap: () {
+          Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, LiveChart(socket, channelName, curWidth, true)));
+        },
+        child: Container(
             child: Center(
                 child: liveChart
             )
+        )
       );
     }
     return Scaffold(

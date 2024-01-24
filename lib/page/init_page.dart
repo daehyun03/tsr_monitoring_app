@@ -29,7 +29,36 @@ Widget _body(double curWidth, double curHeight, List machineList) {
             width: curWidth * 0.14,
             child: Column(
               children: [
-                Placeholder(),
+                Column(
+                  children: [
+                    Image.asset('assets/images/TSR_image.jpg'),
+                    Container(
+                      color: Color(0xFF3E3E3E),
+                      child: Table(
+                          columnWidths: const {
+                            0: FlexColumnWidth(1),
+                            1: FlexColumnWidth(2),
+                          },
+                          border: TableBorder.all(color: Colors.black),
+                          children: const [
+                            TableRow(
+                                children: [
+                                  Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: Center(child: Text('회사명'))),
+                                  Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: Center(child: Text('티에스알'))),
+                                ]
+                            ),
+                            TableRow(
+                                children: [
+                                  Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: Center(child: Text('업종'))),
+                                  Center(child: Text('산업용 그 외 비경화\n 고무제품 제조업',))
+                                ]
+                            ),
+                          ]
+                      )
+                    ),
+                  ],
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10)),
                 Placeholder(),
               ],
             ),

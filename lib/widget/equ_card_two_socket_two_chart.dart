@@ -61,9 +61,14 @@ class _EquCardTSTC extends State<EquCardTSTC> {
   @override
   Widget build(BuildContext context) {
     if(curWidth >= 768) {
-      return Container(
-        child: Center(
-            child: body
+      return GestureDetector(
+        onTap: () {
+          Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, _makeBody(true)));
+        },
+        child: Container(
+            child: Center(
+                child: body
+            )
         )
       );
     }
