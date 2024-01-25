@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../util/unique_shared_preference.dart';
+
 class PageContainer extends StatelessWidget {
   late Widget body;
 
@@ -23,12 +25,14 @@ class PageContainer extends StatelessWidget {
                   label: Text('설정'),
                 ),
               ],
-              selectedIndex: 0,
+              selectedIndex: int.parse(UniqueSharedPreference.getString('selectedIndex')),
               onDestinationSelected: (int index) {
                 if (index == 0) {
                   Navigator.pushNamed(context, '/');
+                  UniqueSharedPreference.setString('selectedIndex', index.toString());
                 } else if (index == 1) {
                   Navigator.pushNamed(context, '/setting');
+                  UniqueSharedPreference.setString('selectedIndex', index.toString());
                 }
               },
             ),
@@ -46,6 +50,14 @@ class PageContainer extends StatelessWidget {
           title: const Text('TSR 모니터링 시스템', style: TextStyle(fontWeight: FontWeight.w900),),
           centerTitle: true,
           elevation: 5.0,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                Navigator.pushNamed(context, '/setting');
+              },
+            )
+          ],
         ),
         body: body
     );
