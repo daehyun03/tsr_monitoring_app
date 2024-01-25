@@ -90,7 +90,9 @@ class _AvgDataChart extends State<AvgDataChart> {
   @override
   Widget build(BuildContext context) {
     String curUnit = UniqueSharedPreference.getString("selectedUnit");
+
     return Container(
+      height: MediaQuery.of(context).size.height * 0.55,
       child: Column(
         children: [
           const Padding(padding: EdgeInsets.only(top: 20)),
