@@ -59,8 +59,6 @@ class _AvgDataChart extends State<AvgDataChart> {
         "&end=" + DateFormat(REQUEST_DATE_FORMAT).format(curDate));
     final res = await http.get(url);
     List temp = jsonDecode(res.body) as List;
-    print(machineName);
-    print(temp);
     if(temp.length / 2 <= 1) {
       setState(() {
         data = [];
