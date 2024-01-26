@@ -5,50 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:tsr_monitoring_app/util/constants.dart';
 import 'package:http/http.dart' as http;
 
-//더미데이터
-const data = [
-  [
-    "2023-08-21 00:00:00.385910",
-    1000.0,
-    1210.0
-  ],
-  [
-    "2023-08-21 00:00:00.385910",
-    1000.0,
-    1210.0
-  ],[
-    "2023-08-21 00:00:00.385910",
-    1000.0,
-    1210.0
-  ],[
-    "2023-08-21 00:00:00.385910",
-    1000.0,
-    1210.0
-  ],[
-    "2023-08-21 00:00:00.385910",
-    1000.0,
-    1210.0
-  ],[
-    "2023-08-21 00:00:00.385910",
-    1000.0,
-    1210.0
-  ],[
-    "2023-08-21 00:00:00.385910",
-    1000.0,
-    1210.0
-  ],[
-    "2023-08-21 00:00:00.385910",
-    1000.0,
-    1210.0
-  ],[
-    "2023-08-21 00:00:00.385910",
-    1000.0,
-    1210.0
-  ],
-];
-
 class AnomalyData {
-  final String date;
+  final DateTime date;
   final double threshold;
   final double score;
   final String name;
@@ -81,21 +39,26 @@ class _AnomalyListView extends State<AnomalyListView> {
   }
 
   String getUrl() {
-    String url = "$BASE_URL/stat/anomaly?machine=${machineNameMap[machineName]!}&start=${DateFormat(DATE_FORMAT).format(_startDate)}&end=${DateFormat(DATE_FORMAT).format(_endDate)}";
-    print(url);
-    return url;
+    if(machineName == 'all') {
+      String url = "$BASE_URL/stat/anomaly/all?start=${DateFormat(DATE_FORMAT).format(_startDate)}&end=${DateFormat(DATE_FORMAT).format(_endDate)}";
+      return url;
+    } else {
+      String url = "$BASE_URL/stat/anomaly?machine=${machineNameMapKorToEng[machineName]!}&start=${DateFormat(DATE_FORMAT).format(_startDate)}&end=${DateFormat(DATE_FORMAT).format(_endDate)}";
+      return url;
+    }
+
   }
 
   void getDataList() async{
     dataList = [];
     final url = Uri.parse(getUrl());
     final res = await http.get(url);
-    List list = jsonDecode(res.body)['anomaly'] as List;
+    List list = jsonDecode(res.body) as List;
 
     for(int i=0; i<list.length; i++){
         dataList.add(new AnomalyData(
           list[i]["name"],
-          list[i]["time"],
+          DateTime.parse(list[i]["time"]),
           list[i]["threshold"],
           list[i]["score"]
         ));
@@ -103,6 +66,7 @@ class _AnomalyListView extends State<AnomalyListView> {
     setState(() {
       dataList = dataList;
     });
+    print(dataList);
   }
 
   @override
@@ -194,16 +158,37 @@ class _AnomalyListView extends State<AnomalyListView> {
   }
 
   Widget _buildAlertRow(BuildContext context, AnomalyData data) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Align(alignment: Alignment.centerLeft, child: Text(data.date)),
-            Align(alignment: Alignment.centerRight, child: Text('이상치 발견 : ${data.score}/${data.threshold}')),
-          ],
+    if(machineName == 'all') {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Align(alignment: Alignment.centerLeft, child:Text(machineNameMapEngToKor[data.name]!)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(DateFormat('yyyy-MM-dd hh:mm').format(data.date)),
+                  Text('이상치 발견 : ${data.score}/${data.threshold}'),
+                ],
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(DateFormat('yyyy-MM-dd hh:mm').format(data.date)),
+              Text('이상치 발견 : ${data.score}/${data.threshold}'),
+            ],
+          ),
+        ),
+      );
+    }
   }
 }

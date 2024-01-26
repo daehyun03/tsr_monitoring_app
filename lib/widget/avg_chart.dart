@@ -45,7 +45,7 @@ class _AvgDataChart extends State<AvgDataChart> {
   void getDataList1() async {
     data = [];
     final url = Uri.parse(BASE_URL + "/stat/hour?machine=" +
-        machineNameMap[machineName]! + "&date=" +
+        machineNameMapKorToEng[machineName]! + "&date=" +
         DateFormat(DATE_FORMAT).format(curDate));
     final res = await http.get(url);
 
@@ -69,7 +69,7 @@ class _AvgDataChart extends State<AvgDataChart> {
     data = [];
     for (int i = 0; i < channelList.length; i++) {
       final url = Uri.parse(BASE_URL + "/stat/hour?machine=" +
-          machineNameMap[machineName + (i + 1).toString()]! + "&date=" +
+          machineNameMapKorToEng[machineName + (i + 1).toString()]! + "&date=" +
           DateFormat(DATE_FORMAT).format(curDate));
       final res = await http.get(url);
       List list = jsonDecode(res.body)[channelList[i] + "_hour_avg"] as List;

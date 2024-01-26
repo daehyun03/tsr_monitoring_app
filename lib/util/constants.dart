@@ -1,9 +1,11 @@
-const Map<String, String> machineNameMap = {"쇼트블라스트": "ShotBlast", "인산염피막기": "AROPump", "비형상도포기": "Dispenser",
+const Map<String, String> machineNameMapKorToEng = {"쇼트블라스트": "ShotBlast", "인산염피막기": "AROPump", "비형상도포기": "Dispenser",
   "진공펌프": "VacuumPump", "진공펌프1": "VacuumPump1","진공펌프2": "VacuumPump2"};
+const Map<String, String> machineNameMapEngToKor = {"ShotBlast": "쇼트블라스트", "AROPump": "인산염피막기", "Dispenser": "비형상도포기",
+  "VacuumPump": "진공펌프", "VacuumPump1": "진공펌프1", "VacuumPump2": "진공펌프2"};
 const Map<String, String> channelNameMap = {"shot_blast_vib1": "쇼트블라스트1", "shot_blast_vib2": "쇼트블라스트2", "aro_vib1": "입출부",
   "aro_vib2": "토출부", "dispenser_vib": "비형상도포기", "pump1_vib": "진공펌프1", "pump2_vib": "진공펌프2"};
 const List machineList = ["쇼트블라스트", "인산염피막기", "비형상도포기", "진공펌프"];
-const List avgList = ["시", "일", "주", "월", "년"];
+const List avgList = ["시", "일", "월", "년"];
 const SHOT_BLAST = "쇼트블라스트";
 const ARO_PUMP = "인산염피막기";
 const DISPENSING_MACHINE = "비형상도포기";

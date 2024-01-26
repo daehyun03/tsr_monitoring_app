@@ -76,7 +76,8 @@ Widget _body(double curWidth, double curHeight, List machineList) {
           ),
           Container(
             width: curWidth * 0.2,
-            //child: AnomalyListView("")
+            height: curHeight * 0.9,
+            child: AnomalyListView("all")
           ),
         ],
       )

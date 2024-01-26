@@ -29,8 +29,8 @@ class DetailPage extends StatelessWidget {
           arguments.body,
           Expanded(child: Row(
             children: [
-              /*Expanded(child: Padding(padding:const EdgeInsets.all(10), child: AvgDataChart(arguments.machineName))),
-              Expanded(child: Padding(padding:const EdgeInsets.all(10), child: AnomalyListView(arguments.machineName))),*/
+              Expanded(child: Padding(padding:const EdgeInsets.all(10), child: AvgDataChart(arguments.machineName))),
+              Expanded(child: Padding(padding:const EdgeInsets.all(10), child: AnomalyListView(arguments.machineName))),
             ]
           ))
         ]
