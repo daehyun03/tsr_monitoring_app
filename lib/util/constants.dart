@@ -8,11 +8,13 @@ const SHOT_BLAST = "쇼트블라스트";
 const ARO_PUMP = "인산염피막기";
 const DISPENSING_MACHINE = "비형상도포기";
 const VACUUM_PUMP = "진공펌프";
-//const BASE_URL = "http://202.31.202.34:443";
-const BASE_URL = "http://182.228.122.118:8445";
+const BASE_URL = "http://14.46.226.218:8080";
+//const BASE_URL = "http://182.228.122.118:8445";
 const DATE_FORMAT = "yyyy-MM-dd";
 
 const ANOMALY_EVENT = "anomaly";
+const INITIALIZE_EVENT = "initialize";
+const UPDATE_EVENT = "update";
 const SCORE = "score";
 const THRESHOLD = "threshold";
 

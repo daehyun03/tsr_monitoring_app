@@ -23,7 +23,6 @@ class _LiveChart extends State<LiveChart> {
   List<_ChartData> chartData = <_ChartData>[];
   double threshold = 0;
   double score = 0;
-  double count = 0;
   ChartSeriesController? _chartSeriesController;
   bool isAnomaly = false;
   late double curWidth;
@@ -38,29 +37,36 @@ class _LiveChart extends State<LiveChart> {
     }
     socket.onAny((eventName, data) {
       try {
-        if (eventName == ANOMALY_EVENT) {
-          setState(() {
-            isAnomaly = data[ANOMALY_EVENT];
-            threshold = data[THRESHOLD] as double;
-            score = data[SCORE] as double;
-          });
-        } else {
-          data[channelName].forEach((value) {
-            chartData.add(_ChartData(count, value));
-            if (chartData.length == maxLen) {
-              chartData.removeAt(0);
-              _chartSeriesController?.updateDataSource(
-                  addedDataIndexes: <int>[chartData.length - 1],
-                  removedDataIndexes: <int>[0]);
-            } else {
-              _chartSeriesController?.updateDataSource(
-                  addedDataIndexes: <int>[chartData.length - 1]);
+        if(data != null) {
+          if (eventName == ANOMALY_EVENT) {
+            setState(() {
+              isAnomaly = score > threshold;
+              threshold = data[THRESHOLD] as double;
+              score = data[SCORE] as double;
+            });
+          } else if (eventName == INITIALIZE_EVENT) {
+            if (data[0]["sensor_name"] == channelName) {
+              data.forEach((value) {
+                chartData.add(_ChartData(DateTime.parse(value["time"]), value["data"]));
+                if (chartData.length == maxLen) {
+                  chartData.removeAt(0);
+                  _chartSeriesController?.updateDataSource(
+                      addedDataIndexes: <int>[chartData.length - 1],
+                      removedDataIndexes: <int>[0]);
+                } else {
+                  _chartSeriesController?.updateDataSource(
+                      addedDataIndexes: <int>[chartData.length - 1]);
+                }
+              });
+            } else if (eventName == UPDATE_EVENT) {
+              if (data[0]["sensor_name"] == channelName) {
+
+              }
             }
-            count += 1 / data[channelName].length;
           }
-          );
         }
       } catch (e) {
+        print(e);
       }
     });
   }
@@ -74,7 +80,6 @@ class _LiveChart extends State<LiveChart> {
     } else {
       itemHeight = curHeight * 0.35;
     }
-
     return(
       Column(children: [
           Container(
@@ -82,14 +87,14 @@ class _LiveChart extends State<LiveChart> {
             height: itemHeight,
             child: SfCartesianChart(
               title: ChartTitle(text: channelNameMap[channelName]!),
-              primaryXAxis: NumericAxis(isVisible: false),
+              primaryXAxis: DateTimeAxis(dateFormat: DateFormat('HH:mm')),
               primaryYAxis: NumericAxis(
                 //interval: 0.1,
                 decimalPlaces: 10,
                 numberFormat: NumberFormat('0.##E+0'),
                 rangePadding: ChartRangePadding.round,
               ),
-              series: <LineSeries<_ChartData, double>>[
+              series: <LineSeries<_ChartData, DateTime>>[
                 LineSeries(
                   onRendererCreated: (ChartSeriesController controller) {
                     _chartSeriesController = controller;
@@ -111,6 +116,11 @@ class _LiveChart extends State<LiveChart> {
         ],
       )
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Padding _getBottomWrap() {
@@ -136,15 +146,10 @@ class _LiveChart extends State<LiveChart> {
     }
     return Text("정상", style: TextStyle(fontSize: size, color: Colors.green));
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }
 
 class _ChartData {
   _ChartData(this.x, this.y);
-  double x;
+  DateTime x;
   double y;
 }

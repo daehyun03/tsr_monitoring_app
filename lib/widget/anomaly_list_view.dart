@@ -80,8 +80,8 @@ class _AnomalyListView extends State<AnomalyListView> {
   }
 
   String getUrl() {
-    String url = BASE_URL + "/stat/anomaly?machine=" + machineNameMap[machineName]! + "&start=" + DateFormat(DATE_FORMAT).format(_startDate)
-      +"&end=" +DateFormat(DATE_FORMAT).format(_endDate);
+    String url = "$BASE_URL/stat/anomaly?machine=${machineNameMap[machineName]!}&start=${DateFormat(DATE_FORMAT).format(_startDate)}&end=${DateFormat(DATE_FORMAT).format(_endDate)}";
+    print(url);
     return url;
   }
 
