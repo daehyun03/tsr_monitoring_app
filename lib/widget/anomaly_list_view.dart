@@ -40,10 +40,10 @@ class _AnomalyListView extends State<AnomalyListView> {
 
   String getUrl() {
     if(machineName == 'all') {
-      String url = "$BASE_URL/stat/anomaly/all?start=${DateFormat(DATE_FORMAT).format(_startDate)}&end=${DateFormat(DATE_FORMAT).format(_endDate)}";
+      String url = "$BASE_URL/stat/anomaly/all?start=${DateFormat(REQUEST_DATE_FORMAT).format(_startDate)}&end=${DateFormat(REQUEST_DATE_FORMAT).format(_endDate)}";
       return url;
     } else {
-      String url = "$BASE_URL/stat/anomaly?machine=${machineNameMapKorToEng[machineName]!}&start=${DateFormat(DATE_FORMAT).format(_startDate)}&end=${DateFormat(DATE_FORMAT).format(_endDate)}";
+      String url = "$BASE_URL/stat/anomaly?machine=${machineNameMapKorToEng[machineName]!}&start=${DateFormat(REQUEST_DATE_FORMAT).format(_startDate)}&end=${DateFormat(REQUEST_DATE_FORMAT).format(_endDate)}";
       return url;
     }
 
@@ -66,7 +66,6 @@ class _AnomalyListView extends State<AnomalyListView> {
     setState(() {
       dataList = dataList;
     });
-    print(dataList);
   }
 
   @override
@@ -94,7 +93,7 @@ class _AnomalyListView extends State<AnomalyListView> {
                         });
                       }
                     },
-                    child: Text(DateFormat(DATE_FORMAT).format(_startDate)),
+                    child: Text(DateFormat(REQUEST_DATE_FORMAT).format(_startDate)),
                   ),
                 ),
               Text("~"),
@@ -113,7 +112,7 @@ class _AnomalyListView extends State<AnomalyListView> {
                       });
                     }
                   },
-                  child: Text(DateFormat(DATE_FORMAT).format(_endDate)),
+                  child: Text(DateFormat(REQUEST_DATE_FORMAT).format(_endDate)),
                 ),
               )
           ]),

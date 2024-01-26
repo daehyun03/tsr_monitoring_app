@@ -22,6 +22,7 @@ class _AvgDataChart extends State<AvgDataChart> {
   List<_dateAvgData> data = [];
   DateTime curDate = DateTime.now();
   DateTime today = DateTime.now();
+  late String curUnit;
 
   _AvgDataChart(this.machineName);
 
@@ -30,7 +31,13 @@ class _AvgDataChart extends State<AvgDataChart> {
   @override
   void initState() {
     super.initState();
+    curUnit = UniqueSharedPreference.getString("selectedUnit");
     channelList = getChanelNameList(machineName);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     getDataList(getIsOneSocket(machineName));
   }
 
@@ -43,54 +50,80 @@ class _AvgDataChart extends State<AvgDataChart> {
   }
 
   void getDataList1() async {
+    String engCurUnit = unitMapKorToEng[curUnit]!;
+    DateTime startDate = getStartDate(engCurUnit, curDate);
     data = [];
-    final url = Uri.parse(BASE_URL + "/stat/hour?machine=" +
-        machineNameMapKorToEng[machineName]! + "&date=" +
-        DateFormat(DATE_FORMAT).format(curDate));
+    final url = Uri.parse(BASE_URL + "/stat/" + engCurUnit + "?machine=" +
+        machineNameMapKorToEng[machineName]! +
+        "&start=" + DateFormat(REQUEST_DATE_FORMAT).format(startDate) +
+        "&end=" + DateFormat(REQUEST_DATE_FORMAT).format(curDate));
     final res = await http.get(url);
-
-    for (int i = 0; i < channelList.length; i++) {
-      List list = jsonDecode(res.body)[channelList[i] + "_hour_avg"] as List;
-      for (int j = 0; j < list.length; j++) {
-        if(i == 0) {
-          data.add(_dateAvgData(DateTime.parse(list[j][0]), list[j][1]));
-        } else {
-          data[j].addAvg(list[j][1]);
-        }
+    List temp = jsonDecode(res.body) as List;
+    print(machineName);
+    print(temp);
+    if(temp.length / 2 <= 1) {
+      setState(() {
+        data = [];
+      });
+      return;
+    }
+    List channel1 = [];
+    List channel2 = [];
+    for(int i = 0; i < temp.length; i++) {
+      if(temp[i]['name'] == channelList[0] + "_" + engCurUnit + "_avg") {
+        channel1.add(temp[i]);
+      } else {
+        channel2.add(temp[i]);
       }
     }
-
+    for(int i = 0; i < channel1.length; i++) {
+      if(channel2.length == 0) {
+        data.add(_dateAvgData(DateTime.parse(channel1[i]['time']), [channel1[i]['data']]));
+      } else {
+        data.add(_dateAvgData(DateTime.parse(channel1[i]['time']), [channel1[i]['data'], channel2[i]['data']]));
+      }
+    }
     setState(() {
       data = data;
     });
   }
 
   void getDataList2() async {
-    data = [];
-    for (int i = 0; i < channelList.length; i++) {
+    /*data = [];
+    *//*for (int i = 0; i < channelList.length; i++) {
       final url = Uri.parse(BASE_URL + "/stat/hour?machine=" +
           machineNameMapKorToEng[machineName + (i + 1).toString()]! + "&date=" +
-          DateFormat(DATE_FORMAT).format(curDate));
+          DateFormat(REQUEST_DATE_FORMAT).format(curDate));
       final res = await http.get(url);
       List list = jsonDecode(res.body)[channelList[i] + "_hour_avg"] as List;
       for (int j = 0; j < list.length; j++) {
         if(i == 0) {
           data.add(_dateAvgData(DateTime.parse(list[j][0]), list[j][1]));
         } else {
-          data[j].addAvg(list[j][1]);
+          //data[j].addAvg(list[j][1]);
         }
-      }
+      }*//*
     }
 
     setState(() {
       data = data;
-    });
+    });*/
+  }
+
+  DateTime getStartDate(String engCurUnit, DateTime curDate) {
+    if(engCurUnit == "hour") {
+      return curDate.subtract(Duration(days: 2));
+    } else if(engCurUnit == "day") {
+      return curDate.subtract(Duration(days: 30));
+    } else if(engCurUnit == "month") {
+      return curDate.subtract(Duration(days: 365));
+    } else {
+      return curDate.subtract(Duration(days: 3650));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    String curUnit = UniqueSharedPreference.getString("selectedUnit");
-
     return Container(
       height: MediaQuery.of(context).size.height * 0.55,
       child: Column(
@@ -122,6 +155,8 @@ class _AvgDataChart extends State<AvgDataChart> {
                         onPressed: () async {
                           setState(() {
                             UniqueSharedPreference.setString("selectedUnit", avgList[i]);
+                            curUnit = avgList[i];
+                            didChangeDependencies();
                           });
                         },
                         child: Text(avgList[i])
@@ -143,7 +178,7 @@ class _AvgDataChart extends State<AvgDataChart> {
       return SfCartesianChart(
         legend: Legend(isVisible: true, position: LegendPosition.bottom),
         tooltipBehavior: TooltipBehavior(enable: true),
-        primaryXAxis: DateTimeCategoryAxis(dateFormat: DateFormat("HH")),
+        primaryXAxis: DateTimeCategoryAxis(dateFormat: DateFormat("yyyy-MM-dd hh:mm")),
         primaryYAxis: NumericAxis(
             //interval: 0.1,
             decimalPlaces: 7
@@ -154,18 +189,36 @@ class _AvgDataChart extends State<AvgDataChart> {
               trendlines: <Trendline>[
                   Trendline(
                     type: TrendlineType.linear,
-                    color: Colors.white,
+                    color: trendlineColor(i),
                     name: channelNameMap[channelList[i]]! + " 추세선",
               )],
               name: channelNameMap[channelList[i]]!,
               dataSource: data,
               xValueMapper: (_dateAvgData data, _) => data.date,
-              yValueMapper: (_dateAvgData data, _) => data.avg[i],
-              dataLabelSettings: DataLabelSettings(isVisible: true)
+              yValueMapper: (_dateAvgData data, _) => data.data[i],
+              dataLabelSettings: DataLabelSettings(isVisible: true),
             ),
         ]
       );
     }
+  }
+
+  @override
+  void dispose() {
+    data = [];
+    super.dispose();
+  }
+}
+
+trendlineColor(int i) {
+  if(i == 0) {
+    return Colors.white;
+  } else if(i == 1) {
+    return Colors.purpleAccent;
+  } else if(i == 2) {
+    return Colors.green;
+  } else {
+    return Colors.yellow;
   }
 }
 
@@ -179,13 +232,11 @@ _setButtonColor(String curUnit, String selectedUnit) {
 
 class _dateAvgData {
   final DateTime date;
-  List avg = [];
+  final List<double> data;
 
-  _dateAvgData(this.date, double avg) {
-    this.avg.add(avg);
-  }
+  _dateAvgData(this.date, this.data);
 
   void addAvg(double avg) {
-    this.avg.add(avg);
+    data.add(avg);
   }
 }

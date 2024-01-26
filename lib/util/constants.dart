@@ -4,6 +4,7 @@ const Map<String, String> machineNameMapEngToKor = {"ShotBlast": "쇼트블라�
   "VacuumPump": "진공펌프", "VacuumPump1": "진공펌프1", "VacuumPump2": "진공펌프2"};
 const Map<String, String> channelNameMap = {"shot_blast_vib1": "쇼트블라스트1", "shot_blast_vib2": "쇼트블라스트2", "aro_vib1": "입출부",
   "aro_vib2": "토출부", "dispenser_vib": "비형상도포기", "pump1_vib": "진공펌프1", "pump2_vib": "진공펌프2"};
+const Map<String, String> unitMapKorToEng = {"시": "hour", "일": "day", "월": "month", "년": "year"};
 const List machineList = ["쇼트블라스트", "인산염피막기", "비형상도포기", "진공펌프"];
 const List avgList = ["시", "일", "월", "년"];
 const SHOT_BLAST = "쇼트블라스트";
@@ -12,7 +13,7 @@ const DISPENSING_MACHINE = "비형상도포기";
 const VACUUM_PUMP = "진공펌프";
 const BASE_URL = "http://14.46.226.218:8080";
 //const BASE_URL = "http://182.228.122.118:8445";
-const DATE_FORMAT = "yyyy-MM-dd";
+const REQUEST_DATE_FORMAT = "yyyy-MM-dd";
 
 const ANOMALY_EVENT = "anomaly";
 const INITIALIZE_EVENT = "initialize";
