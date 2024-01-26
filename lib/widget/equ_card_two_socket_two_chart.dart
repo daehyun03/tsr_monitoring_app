@@ -7,27 +7,23 @@ import '../util/detail_screen_argument.dart';
 
 class EquCardTSTC extends StatefulWidget {
   late String machineName;
-  late IO.Socket socket1;
-  late IO.Socket socket2;
   late String channelName1;
   late String channelName2;
   late double curWidth;
   late double curHeight;
-  EquCardTSTC(this.machineName, this.socket1, this.socket2, this.channelName1, this.channelName2, this.curWidth, this.curHeight);
+  EquCardTSTC(this.machineName, this.channelName1, this.channelName2, this.curWidth, this.curHeight);
 
   @override
-  State<StatefulWidget> createState() => _EquCardTSTC(machineName, socket1, socket2, channelName1, channelName2, curWidth, curHeight);
+  State<StatefulWidget> createState() => _EquCardTSTC(machineName, channelName1, channelName2, curWidth, curHeight);
 }
 
 class _EquCardTSTC extends State<EquCardTSTC> {
   late String machineName;
-  late IO.Socket socket1;
-  late IO.Socket socket2;
   late String channelName1;
   late String channelName2;
   late double curWidth;
   late double curHeight;
-  _EquCardTSTC(this.machineName, this.socket1, this.socket2, this.channelName1, this.channelName2, this.curWidth, this.curHeight);
+  _EquCardTSTC(this.machineName, this.channelName1, this.channelName2, this.curWidth, this.curHeight);
   late Widget body;
 
   Widget _makeBody(bool isDetail) {
@@ -36,8 +32,8 @@ class _EquCardTSTC extends State<EquCardTSTC> {
           height: curHeight * 0.8,
           child: Column(
             children: [
-              Expanded(child: LiveChart(socket1, channelName1, curWidth, isDetail)),
-              Expanded(child: LiveChart(socket2, channelName2, curWidth, isDetail)),
+              Expanded(child: LiveChart(channelName1, curWidth, isDetail)),
+              Expanded(child: LiveChart(channelName2, curWidth, isDetail)),
             ],
         )
       );
@@ -45,8 +41,8 @@ class _EquCardTSTC extends State<EquCardTSTC> {
     return Container(
       child: Row(
         children: [
-          Expanded(child: LiveChart(socket1, channelName1, curWidth, isDetail)),
-          Expanded(child: LiveChart(socket2, channelName2, curWidth, isDetail))
+          Expanded(child: LiveChart(channelName1, curWidth, isDetail)),
+          Expanded(child: LiveChart(channelName2, curWidth, isDetail))
         ],
       ),
     );

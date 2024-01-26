@@ -5,29 +5,27 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class EquCardOSOC extends StatefulWidget {
   late String machineName;
-  late IO.Socket socket;
   late String channelName;
   late double curWidth;
   late double curHeight;
 
-  EquCardOSOC(this.machineName, this.socket, this.channelName, this.curWidth, this.curHeight);
+  EquCardOSOC(this.machineName, this.channelName, this.curWidth, this.curHeight);
 
   @override
-  State<StatefulWidget> createState() => _EquCardOSOC(machineName, socket, channelName, curWidth, curHeight);
+  State<StatefulWidget> createState() => _EquCardOSOC(machineName, channelName, curWidth, curHeight);
 }
 
 class _EquCardOSOC extends State<EquCardOSOC> {
-  late IO.Socket socket;
   late String machineName;
   late double curWidth;
   late double curHeight;
   late String channelName;
-  _EquCardOSOC(this.machineName, this.socket, this.channelName, this.curWidth, this.curHeight);
+  _EquCardOSOC(this.machineName, this.channelName, this.curWidth, this.curHeight);
   late LiveChart liveChart;
 
   @override
   void initState() {
-    liveChart = LiveChart(socket, channelName, curWidth, false);
+    liveChart = LiveChart(channelName, curWidth, false);
     super.initState();
   }
 
@@ -36,7 +34,7 @@ class _EquCardOSOC extends State<EquCardOSOC> {
     if(curWidth >= 768) {
       return GestureDetector(
         onTap: () {
-          Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, LiveChart(socket, channelName, curWidth, true)));
+          Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, LiveChart(channelName, curWidth, true)));
         },
         child: Container(
             child: Center(
@@ -53,7 +51,7 @@ class _EquCardOSOC extends State<EquCardOSOC> {
         actions: [
           InkWell(
             onTap: () {
-              Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, LiveChart(socket, channelName, curWidth, true)));
+              Navigator.of(context).pushNamed('/$machineName', arguments: DetailScreenArgument(machineName, LiveChart(channelName, curWidth, true)));
             },
             child: Icon(Icons.more_horiz),
           )

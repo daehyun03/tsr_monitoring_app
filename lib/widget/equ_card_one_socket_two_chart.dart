@@ -6,25 +6,23 @@ import '../util/detail_screen_argument.dart';
 
 class EquCardOSTC extends StatefulWidget {
   late String machineName;
-  late IO.Socket socket;
   late String channelName1;
   late String channelName2;
   late double curWidth;
   late double curHeight;
-  EquCardOSTC(this.machineName, this.socket, this.channelName1, this.channelName2, this.curWidth, this.curHeight);
+  EquCardOSTC(this.machineName, this.channelName1, this.channelName2, this.curWidth, this.curHeight);
 
   @override
-  State<StatefulWidget> createState() => _EquCardOSTC(machineName, socket, channelName1, channelName2, curWidth, curHeight);
+  State<StatefulWidget> createState() => _EquCardOSTC(machineName, channelName1, channelName2, curWidth, curHeight);
 }
 
 class _EquCardOSTC extends State<EquCardOSTC> {
   late String machineName;
-  late IO.Socket socket;
   late String channelName1;
   late String channelName2;
   late double curWidth;
   late double curHeight;
-  _EquCardOSTC(this.machineName, this.socket, this.channelName1, this.channelName2, this.curWidth, this.curHeight);
+  _EquCardOSTC(this.machineName, this.channelName1, this.channelName2, this.curWidth, this.curHeight);
   late Widget body;
 
   Widget _makeBody(bool isDetail) {
@@ -33,16 +31,16 @@ class _EquCardOSTC extends State<EquCardOSTC> {
           height: curHeight * 0.8,
           child: Column(
             children: [
-              Expanded(child: LiveChart(socket, channelName1, curWidth, isDetail)),
-              Expanded(child: LiveChart(socket, channelName2, curWidth, isDetail))
+              Expanded(child: LiveChart(channelName1, curWidth, isDetail)),
+              Expanded(child: LiveChart(channelName2, curWidth, isDetail))
             ],
           )
       );
     }
     return Row(
       children: [
-        Expanded(child: LiveChart(socket, channelName1, curWidth, isDetail)),
-        Expanded(child: LiveChart(socket, channelName2, curWidth, isDetail))
+        Expanded(child: LiveChart(channelName1, curWidth, isDetail)),
+        Expanded(child: LiveChart(channelName2, curWidth, isDetail))
       ],
     );
   }

@@ -67,16 +67,16 @@ Widget _body(double curWidth, double curHeight, List machineList) {
             width: curWidth * 0.6,
             child: Column(
               children: [
-                EquCardOSTC(machineList[0], createSocket(BASE_URL+SHOT_BLAST_URL), SHOT_BLAST1_CHANNEL_NAME, SHOT_BLAST2_CHANNEL_NAME, curWidth, curHeight),
-                EquCardOSTC(machineList[1], createSocket(BASE_URL+ARO_PUMP_URL), ARO_PUMP1_CHANNEL_NAME, ARO_PUMP2_CHANNEL_NAME, curWidth, curHeight),
-                EquCardOSOC(machineList[2], createSocket(BASE_URL+DISPENSING_MACHINE_URL), DISPENSING_MACHINE_CHANNEL_NAME, curWidth, curHeight),
-                EquCardTSTC(machineList[3], createSocket(BASE_URL+VACUUM_PUMP1_URL), createSocket(BASE_URL+VACUUM_PUMP2_URL), VACUUM_PUMP1_CHANNEL_NAME, VACUUM_PUMP2_CHANNEL_NAME, curWidth, curHeight),
+                EquCardOSTC(machineList[0], SHOT_BLAST1_CHANNEL_NAME, SHOT_BLAST2_CHANNEL_NAME, curWidth, curHeight),
+                EquCardOSTC(machineList[1], ARO_PUMP1_CHANNEL_NAME, ARO_PUMP2_CHANNEL_NAME, curWidth, curHeight),
+                EquCardOSOC(machineList[2], DISPENSING_MACHINE_CHANNEL_NAME, curWidth, curHeight),
+                EquCardTSTC(machineList[3], VACUUM_PUMP1_CHANNEL_NAME, VACUUM_PUMP2_CHANNEL_NAME, curWidth, curHeight),
               ]
             )
           ),
           Container(
             width: curWidth * 0.2,
-            child: AnomalyListView("")
+            //child: AnomalyListView("")
           ),
         ],
       )
@@ -96,10 +96,10 @@ Widget _body(double curWidth, double curHeight, List machineList) {
         crossAxisCount: 1,
         childAspectRatio: (curWidth/2) / (curHeight/4),
         children: <Widget> [
-        EquCardOSTC(machineList[0], createSocket(BASE_URL+SHOT_BLAST_URL), SHOT_BLAST1_CHANNEL_NAME, SHOT_BLAST2_CHANNEL_NAME, curWidth, curHeight),
-        EquCardOSTC(machineList[1], createSocket(BASE_URL+ARO_PUMP_URL), ARO_PUMP1_CHANNEL_NAME, ARO_PUMP2_CHANNEL_NAME, curWidth, curHeight),
-        EquCardOSOC(machineList[2], createSocket(BASE_URL+DISPENSING_MACHINE_URL), DISPENSING_MACHINE_CHANNEL_NAME, curWidth, curHeight),
-        EquCardTSTC(machineList[3], createSocket(BASE_URL+VACUUM_PUMP1_URL), createSocket(BASE_URL+VACUUM_PUMP2_URL), VACUUM_PUMP1_CHANNEL_NAME, VACUUM_PUMP2_CHANNEL_NAME, curWidth, curHeight),
+        EquCardOSTC(machineList[0], SHOT_BLAST1_CHANNEL_NAME, SHOT_BLAST2_CHANNEL_NAME, curWidth, curHeight),
+        EquCardOSTC(machineList[1], ARO_PUMP1_CHANNEL_NAME, ARO_PUMP2_CHANNEL_NAME, curWidth, curHeight),
+        EquCardOSOC(machineList[2], DISPENSING_MACHINE_CHANNEL_NAME, curWidth, curHeight),
+        EquCardTSTC(machineList[3], VACUUM_PUMP1_CHANNEL_NAME, VACUUM_PUMP2_CHANNEL_NAME, curWidth, curHeight),
       ]
     );
   }

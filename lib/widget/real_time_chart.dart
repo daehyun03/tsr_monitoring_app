@@ -5,14 +5,15 @@ import 'package:tsr_monitoring_app/util/constants.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:intl/intl.dart';
 
+import '../util/stream_socket.dart';
+
 class LiveChart extends StatefulWidget {
-  late IO.Socket socket;
   late String channelName;
   late double curWidth;
   late bool isDetail;
-  LiveChart(this.socket, this.channelName, this.curWidth, this.isDetail);
+  LiveChart(this.channelName, this.curWidth, this.isDetail);
   @override
-  _LiveChart createState() => _LiveChart(socket, channelName, curWidth, isDetail);
+  _LiveChart createState() => _LiveChart(channelName, curWidth, isDetail);
 }
 
 class _LiveChart extends State<LiveChart> {
@@ -26,10 +27,12 @@ class _LiveChart extends State<LiveChart> {
   ChartSeriesController? _chartSeriesController;
   bool isAnomaly = false;
   late double curWidth;
-  _LiveChart(this.socket, this.channelName, this.curWidth, this.isDetail);
+  _LiveChart(this.channelName, this.curWidth, this.isDetail);
   @override
   void initState() {
     super.initState();
+    socket = createSocket(BASE_URL + sioUrlMap[channelName]!);
+    socket.connect();
     if (curWidth <= 768) {
       maxLen = 80;
     } else {
@@ -45,9 +48,26 @@ class _LiveChart extends State<LiveChart> {
               score = data[SCORE] as double;
             });
           } else if (eventName == INITIALIZE_EVENT) {
-            if (data[0]["sensor_name"] == channelName) {
-              data.forEach((value) {
-                chartData.add(_ChartData(DateTime.parse(value["time"]), value["data"]));
+            setState(() {
+              if (data[0]["sensor_name"] == channelName) {
+                data.forEach((value) {
+                  chartData.add(_ChartData(DateTime.parse(value["time"]), value["data"]));
+                  if (chartData.length == maxLen) {
+                    chartData.removeAt(0);
+                    _chartSeriesController?.updateDataSource(
+                        addedDataIndexes: <int>[chartData.length - 1],
+                        removedDataIndexes: <int>[0]);
+                  } else {
+                    _chartSeriesController?.updateDataSource(
+                        addedDataIndexes: <int>[chartData.length - 1]);
+                  }
+                });
+              }
+            });
+          } else if (eventName == UPDATE_EVENT) {
+            setState(() {
+              if (data["sensor_name"] == channelName) {
+                chartData.add(_ChartData(DateTime.parse(data["time"]), data["data"]));
                 if (chartData.length == maxLen) {
                   chartData.removeAt(0);
                   _chartSeriesController?.updateDataSource(
@@ -57,18 +77,15 @@ class _LiveChart extends State<LiveChart> {
                   _chartSeriesController?.updateDataSource(
                       addedDataIndexes: <int>[chartData.length - 1]);
                 }
-              });
-            } else if (eventName == UPDATE_EVENT) {
-              if (data[0]["sensor_name"] == channelName) {
-
               }
-            }
+            });
           }
         }
       } catch (e) {
         print(e);
       }
     });
+    socket.emit('initialize', channelName);
   }
 
   @override
@@ -80,46 +97,49 @@ class _LiveChart extends State<LiveChart> {
     } else {
       itemHeight = curHeight * 0.35;
     }
-    return(
-      Column(children: [
+    return (
+        Column(children: [
           Container(
-            padding: EdgeInsets.all(5),
-            height: itemHeight,
-            child: SfCartesianChart(
-              title: ChartTitle(text: channelNameMap[channelName]!),
-              primaryXAxis: DateTimeAxis(dateFormat: DateFormat('HH:mm')),
-              primaryYAxis: NumericAxis(
-                //interval: 0.1,
-                decimalPlaces: 10,
-                numberFormat: NumberFormat('0.##E+0'),
-                rangePadding: ChartRangePadding.round,
-              ),
-              series: <LineSeries<_ChartData, DateTime>>[
-                LineSeries(
-                  onRendererCreated: (ChartSeriesController controller) {
-                    _chartSeriesController = controller;
-                  },
-                  trendlines: <Trendline>[
-                    Trendline(
-                      type: TrendlineType.linear,
-                      color: Colors.deepOrange,
+              padding: EdgeInsets.all(5),
+              height: itemHeight,
+              child: SfCartesianChart(
+                  title: ChartTitle(text: channelNameMap[channelName]!),
+                  primaryXAxis: DateTimeAxis(dateFormat: DateFormat('HH:mm')),
+                  primaryYAxis: NumericAxis(
+                    //interval: 0.1,
+                    decimalPlaces: 10,
+                    numberFormat: NumberFormat('0.##E+0'),
+                    rangePadding: ChartRangePadding.round,
+                  ),
+                  series: <LineSeries<_ChartData, DateTime>>[
+                    LineSeries(
+                      onRendererCreated: (ChartSeriesController controller) {
+                        _chartSeriesController = controller;
+                      },
+                      trendlines: <Trendline>[
+                        Trendline(
+                          type: TrendlineType.linear,
+                          color: Colors.deepOrange,
+                        )
+                      ],
+                      dataSource: chartData,
+                      xValueMapper: (_ChartData data, _) => data.x,
+                      yValueMapper: (_ChartData data, _) => data.y,
                     )
-                  ],
-                  dataSource: chartData,
-                  xValueMapper: (_ChartData data, _) => data.x,
-                  yValueMapper: (_ChartData data, _) => data.y,
-                )
-              ]
-            )
+                  ]
+              )
           ),
           _getBottomWrap(),
         ],
-      )
+        )
     );
+
   }
 
   @override
   void dispose() {
+    socket.offAny();
+    socket.disconnected;
     super.dispose();
   }
 

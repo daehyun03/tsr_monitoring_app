@@ -51,8 +51,9 @@ class AnomalyData {
   final String date;
   final double threshold;
   final double score;
+  final String name;
 
-  AnomalyData(this.date, this.threshold, this.score);
+  AnomalyData(this.name, this.date, this.threshold, this.score);
 }
 
 class AnomalyListView extends StatefulWidget {
@@ -93,9 +94,10 @@ class _AnomalyListView extends State<AnomalyListView> {
 
     for(int i=0; i<list.length; i++){
         dataList.add(new AnomalyData(
-            list[i]["time"],
-            list[i]["threshold"],
-            list[i]["score"]
+          list[i]["name"],
+          list[i]["time"],
+          list[i]["threshold"],
+          list[i]["score"]
         ));
     }
     setState(() {
