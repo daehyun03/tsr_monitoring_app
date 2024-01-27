@@ -172,11 +172,10 @@ class _AvgDataChart extends State<AvgDataChart> {
     if (data.isEmpty) {
       return const Text("데이터가 없습니다.");
     } else {
-      //TODO : 선택된 단위에 맞게 데이터 요청 및 x축 단위 변경
       return SfCartesianChart(
         legend: Legend(isVisible: true, position: LegendPosition.bottom),
         tooltipBehavior: TooltipBehavior(enable: true),
-        primaryXAxis: DateTimeCategoryAxis(dateFormat: DateFormat("yyyy-MM-dd hh:mm")),
+        primaryXAxis: DateTimeCategoryAxis(dateFormat: (getDateFormat(curUnit))),
         primaryYAxis: NumericAxis(
             //interval: 0.1,
             decimalPlaces: 7
@@ -217,6 +216,18 @@ trendlineColor(int i) {
     return Colors.green;
   } else {
     return Colors.yellow;
+  }
+}
+
+getDateFormat(String curUnit) {
+  if(curUnit == "시") {
+    return DateFormat("yyyy-MM-dd hh:mm");
+  } else if(curUnit == "일") {
+    return DateFormat("yyyy-MM-dd");
+  } else if(curUnit == "월") {
+    return DateFormat("yyyy-MM");
+  } else {
+    return DateFormat("yyyy");
   }
 }
 
