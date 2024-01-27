@@ -4,6 +4,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tsr_monitoring_app/util/constants.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:intl/intl.dart';
+import 'package:tsr_monitoring_app/util/unique_shared_preference.dart';
 
 import '../util/stream_socket.dart';
 
@@ -97,6 +98,8 @@ class _LiveChart extends State<LiveChart> {
     } else {
       itemHeight = curHeight * 0.35;
     }
+    double maxvalue = double.parse(UniqueSharedPreference.getString('maxvalue'));
+    double minvalue = double.parse(UniqueSharedPreference.getString('minvalue'));
     return (
         Column(children: [
           Container(
@@ -106,9 +109,8 @@ class _LiveChart extends State<LiveChart> {
                   title: ChartTitle(text: channelNameMap[channelName]!),
                   primaryXAxis: DateTimeAxis(dateFormat: DateFormat('HH:mm')),
                   primaryYAxis: NumericAxis(
-                    //interval: 0.1,
-                    decimalPlaces: 10,
-                    numberFormat: NumberFormat('0.##E+0'),
+                    minimum: minvalue,
+                    maximum: maxvalue,
                     rangePadding: ChartRangePadding.round,
                   ),
                   series: <LineSeries<_ChartData, DateTime>>[

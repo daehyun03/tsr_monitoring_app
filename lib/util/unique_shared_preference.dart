@@ -8,6 +8,8 @@ class UniqueSharedPreference {
     _instance = await SharedPreferences.getInstance();
     setString('selectedIndex', '0');
     setString('selectedUnit', avgList[0]);
+    setString('maxvalue', '10');
+    setString('minvalue', '-10');
   }
 
   static String getString(String key, [String? defValue]) {
