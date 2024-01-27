@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tsr_monitoring_app/util/unique_shared_preference.dart';
@@ -53,7 +52,7 @@ class _SettingPage extends State<SettingPage> {
   }
 
   Widget _buildSetting(BuildContext context) {
-    return ListView(
+    return Column(
       children: [
         Text("실시간 차트 최댓값"),
         Padding(padding: EdgeInsets.only(top: 20)),

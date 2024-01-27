@@ -2,14 +2,23 @@ import 'package:flutter/material.dart';
 
 import '../util/unique_shared_preference.dart';
 
-class PageContainer extends StatelessWidget {
+class PageContainer extends StatefulWidget {
   late Widget body;
 
   PageContainer(this.body);
 
   @override
+  State<PageContainer> createState() => _PageContainerState(body);
+}
+
+class _PageContainerState extends State<PageContainer> {
+  late Widget body;
+  _PageContainerState(this.body);
+
+  @override
   Widget build(BuildContext context) {
     double curWidth = MediaQuery.of(context).size.width;
+    int count = 0;
     if (curWidth >= 768) {
       return Scaffold(
         body: Row(
@@ -28,13 +37,19 @@ class PageContainer extends StatelessWidget {
               selectedIndex: int.parse(UniqueSharedPreference.getString('selectedIndex')),
               onDestinationSelected: (int index) {
                 if (index == 0) {
-                  Navigator.pushNamed(context, '/');
-                  UniqueSharedPreference.setString('selectedIndex', index.toString());
+                  if (_getCurrentRoute(context) != '/') {
+                    Navigator.pushNamed(context, '/');
+                    UniqueSharedPreference.setString(
+                        'selectedIndex', index.toString());
+                  }
                 } else if (index == 1) {
-                  Navigator.pushNamed(context, '/setting');
-                  UniqueSharedPreference.setString('selectedIndex', index.toString());
+                  if (_getCurrentRoute(context) != '/setting') {
+                    Navigator.pushNamed(context, '/setting');
+                    UniqueSharedPreference.setString(
+                        'selectedIndex', index.toString());
+                  }
                 }
-              },
+              }
             ),
             Expanded(
                 child: Padding(
@@ -54,12 +69,19 @@ class PageContainer extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
-                Navigator.pushNamed(context, '/setting');
+                if (_getCurrentRoute(context) != '/setting') {
+                  Navigator.pushNamed(context, '/setting');
+                }
               },
             )
           ],
         ),
         body: body
     );
+  }
+
+  String _getCurrentRoute(BuildContext context) {
+    Route<dynamic>? route = ModalRoute.of(context);
+    return route?.settings.name.toString() ?? '/';
   }
 }

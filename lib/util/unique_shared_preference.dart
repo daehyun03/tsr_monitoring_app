@@ -16,8 +16,9 @@ class UniqueSharedPreference {
     return _instance.getString(key) ?? defValue ?? "";
   }
 
-  static Future<bool> setString(String key, String value) async {
+  static void setString(String key, String value) async {
     var prefs = await _instance;
-    return prefs.setString(key, value) ?? Future.value(false);
+    prefs.setString(key, value);
+    await prefs.commit();
   }
 }
