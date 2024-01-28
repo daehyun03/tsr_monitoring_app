@@ -42,16 +42,16 @@ class _AvgDataChart extends State<AvgDataChart> {
   }
 
   void getDataList(bool isOneSocket) async {
+    String engCurUnit = unitMapKorToEng[curUnit]!;
+    DateTime startDate = getStartDate(engCurUnit, curDate);
     if (isOneSocket) {
-      getDataList1();
+      getDataList1(engCurUnit, startDate);
     } else {
-      getDataList2();
+      getDataList2(engCurUnit, startDate);
     }
   }
 
-  void getDataList1() async {
-    String engCurUnit = unitMapKorToEng[curUnit]!;
-    DateTime startDate = getStartDate(engCurUnit, curDate);
+  void getDataList1(String engCurUnit, DateTime startDate) async {
     data = [];
     final url = Uri.parse(BASE_URL + "/stat/" + engCurUnit + "?machine=" +
         machineNameMapKorToEng[machineName]! +
@@ -59,7 +59,7 @@ class _AvgDataChart extends State<AvgDataChart> {
         "&end=" + DateFormat(REQUEST_DATE_FORMAT).format(curDate));
     final res = await http.get(url);
     List temp = jsonDecode(res.body) as List;
-    if(temp.length / 2 <= 1) {
+    if (temp.length / 2 <= 1) {
       setState(() {
         data = [];
       });
@@ -67,18 +67,20 @@ class _AvgDataChart extends State<AvgDataChart> {
     }
     List channel1 = [];
     List channel2 = [];
-    for(int i = 0; i < temp.length; i++) {
-      if(temp[i]['name'] == channelList[0] + "_" + engCurUnit + "_avg") {
+    for (int i = 0; i < temp.length; i++) {
+      if (temp[i]['name'] == channelList[0] + "_" + engCurUnit + "_avg") {
         channel1.add(temp[i]);
       } else {
         channel2.add(temp[i]);
       }
     }
-    for(int i = 0; i < channel1.length; i++) {
-      if(channel2.length == 0) {
-        data.add(_dateAvgData(DateTime.parse(channel1[i]['time']), [channel1[i]['data']]));
+    for (int i = 0; i < channel1.length; i++) {
+      if (channel2.length == 0) {
+        data.add(_dateAvgData(
+            DateTime.parse(channel1[i]['time']), [channel1[i]['data']]));
       } else {
-        data.add(_dateAvgData(DateTime.parse(channel1[i]['time']), [channel1[i]['data'], channel2[i]['data']]));
+        data.add(_dateAvgData(DateTime.parse(channel1[i]['time']),
+            [channel1[i]['data'], channel2[i]['data']]));
       }
     }
     setState(() {
@@ -86,26 +88,42 @@ class _AvgDataChart extends State<AvgDataChart> {
     });
   }
 
-  void getDataList2() async {
-    /*data = [];
-    *//*for (int i = 0; i < channelList.length; i++) {
-      final url = Uri.parse(BASE_URL + "/stat/hour?machine=" +
-          machineNameMapKorToEng[machineName + (i + 1).toString()]! + "&date=" +
-          DateFormat(REQUEST_DATE_FORMAT).format(curDate));
+  void getDataList2(String engCurUnit, DateTime startDate) async {
+    data = [];
+    List timeList = [];
+    List channel1 = [];
+    List channel2 = [];
+    for (int i = 0; i < channelList.length; i++) {
+      final url = Uri.parse(BASE_URL + "/stat/" + engCurUnit + "?machine=" +
+          machineNameMapKorToEng[machineName]! +
+          "&start=" + DateFormat(REQUEST_DATE_FORMAT).format(startDate) +
+          "&end=" + DateFormat(REQUEST_DATE_FORMAT).format(curDate));
       final res = await http.get(url);
-      List list = jsonDecode(res.body)[channelList[i] + "_hour_avg"] as List;
-      for (int j = 0; j < list.length; j++) {
-        if(i == 0) {
-          data.add(_dateAvgData(DateTime.parse(list[j][0]), list[j][1]));
-        } else {
-          //data[j].addAvg(list[j][1]);
+      List temp = jsonDecode(res.body) as List;
+      if (temp.length / 2 <= 1) {
+        setState(() {
+          data = [];
+        });
+        return;
+      }
+      if (i == 0) {
+        for (int j = 0; j < temp.length; j++) {
+          timeList.add(temp[j]['time']);
+          channel1.add(temp[j]['data']);
         }
-      }*//*
+      } else {
+        for (int j = 0; j < temp.length; j++) {
+          channel2.add(temp[j]['data']);
+        }
+      }
     }
-
+    for (int i = 0; i < timeList.length; i++) {
+      data.add(_dateAvgData(DateTime.parse(timeList[i]),
+          [channel1[i], channel2[i]]));
+    }
     setState(() {
       data = data;
-    });*/
+    });
   }
 
   DateTime getStartDate(String engCurUnit, DateTime curDate) {
@@ -178,7 +196,7 @@ class _AvgDataChart extends State<AvgDataChart> {
         primaryXAxis: DateTimeCategoryAxis(dateFormat: (getDateFormat(curUnit))),
         primaryYAxis: NumericAxis(
             //interval: 0.1,
-            decimalPlaces: 7
+            decimalPlaces: 6
         ),
         series: <CartesianSeries<_dateAvgData, DateTime>>[
           for (int i = 0; i < channelList.length; i++)

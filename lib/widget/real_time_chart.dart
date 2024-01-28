@@ -111,6 +111,7 @@ class _LiveChart extends State<LiveChart> {
                   primaryYAxis: NumericAxis(
                     minimum: minvalue,
                     maximum: maxvalue,
+                    decimalPlaces: 6,
                     rangePadding: ChartRangePadding.round,
                   ),
                   series: <LineSeries<_ChartData, DateTime>>[

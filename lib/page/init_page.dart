@@ -59,7 +59,6 @@ Widget _body(double curWidth, double curHeight, List machineList) {
                   ],
                 ),
                 const Padding(padding: EdgeInsets.only(top: 10)),
-                Placeholder(),
               ],
             ),
           ),
